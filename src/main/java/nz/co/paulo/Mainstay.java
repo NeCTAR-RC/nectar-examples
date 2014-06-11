@@ -16,6 +16,8 @@ public class Mainstay {
     private static final Map<String, Integer> totals = new ConcurrentHashMap<>();
 
     public static void main(String[] args) {
+        // we'll run on port 8080
+        setPort(8080);
         // we'll serve a css file from here
         staticFileLocation("/public");
         // alarms will be of the form:
