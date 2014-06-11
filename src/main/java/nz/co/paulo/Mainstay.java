@@ -25,7 +25,7 @@ public class Mainstay {
         // where source and some_value can vary
         get("/alarm", addToAlarmTotals());
         // and we can view the history of our alarms at http://www.somesite.com/history
-        get("/index.html", (request, response) -> new HistoryPage(totals).toString());
+        get("/history", (request, response) -> new HistoryPage(totals).toString());
     }
 
     private static Route addToAlarmTotals() {

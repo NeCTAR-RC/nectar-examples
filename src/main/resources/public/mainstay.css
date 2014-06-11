@@ -21,3 +21,13 @@ td {
     border: 1px solid #98bf21;
     padding: 3px 7px 2px 7px;
 }
+
+body {
+    color: #333333;
+    font-family: "Myriad Pro",Verdana,Arial,Helvetica,sans-serif;
+    font-size: 100%;
+    line-height: 145%;
+    text-align: center;
+    background-color: lightgoldenrodyellow;
+}
+
