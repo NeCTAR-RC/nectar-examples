@@ -22,9 +22,7 @@ public class HistoryPage {
     private int rowCount;
 
     public HistoryPage(Map<String, Integer> alarmTotals) {
-        alarmTotals.forEach((source, value) -> {
-            this.alarmTotals.put(source, value);
-        });
+        alarmTotals.forEach(this.alarmTotals::put);
     }
 
     @Override
