@@ -1,5 +1,6 @@
 package nz.co.paulo;
 
+import spark.Request;
 import spark.Route;
 
 import java.util.Map;
@@ -26,18 +27,33 @@ public class Mainstay {
         get("/alarm", addToAlarmTotals());
         // and we can view the history of our alarms at http://www.somesite.com/history
         get("/history", (request, response) -> new HistoryPage(totals).toString());
+        // and we now want to check what happens on a post...
+        post("/alarm", newAlarmSounded());
     }
 
     private static Route addToAlarmTotals() {
         return (request, response) -> {
-            String source = request.queryParams("source");
-            // we got a request that doesn't match our simple scheme...
-            if (source == null) {
-                source = "unknown?";
-            }
-            totals.put(source, totals.getOrDefault(source, 0) + 1);
+            String source = recordAlarm(request);
             // just how do we respond to a ceilometer alarm?
             return "Hello World! This is lambda responding to your alarm: " + source + "...";
+        };
+    }
+
+    private static String recordAlarm(Request request) {
+        String source = request.queryParams("source");
+        // we got a request that doesn't match our simple scheme...
+        if (source == null) {
+            source = "unknown?";
+        }
+        totals.put(source, totals.getOrDefault(source, 0) + 1);
+        return source;
+    }
+
+    private static Route newAlarmSounded() {
+        return (request, response) -> {
+            recordAlarm(request);
+            response.status(200);
+            return response;
         };
     }
 
