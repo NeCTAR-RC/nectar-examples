@@ -1,4 +1,4 @@
 SparkProject
 ============
 
-A project to learn a little about Spark and Ceilometer alarms
+A project that when run, can be used to count Ceilometer alarm calls
