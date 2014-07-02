@@ -33,6 +33,14 @@ public class Mainstay {
         post("alarm/:name", (rq, rs) -> alarmRegistered(rq, rs));
         // and we can view the history of our alarms
         get("/history", (rq, rs) -> new History().getHistory(totals), new MustacheTemplateEngine());
+        get("/clear", (rq, rs) -> {totals.clear(); rs.redirect("/history"); return rs;});
+        get("/reset", (rq, rs) -> resetTotals(rs));
+    }
+
+    private static Response resetTotals(Response response) {
+        totals.keySet().forEach((key)->totals.put(key, 0));
+        response.redirect("/history");
+        return response;
     }
 
     private static Response alarmRegistered(Request request, Response response) {
