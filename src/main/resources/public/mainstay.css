@@ -11,7 +11,7 @@ th {
     color: #ffffff;
 }
 
-tr.alt td {
+tr.even td {
     color: #000000;
     background-color: #EAF2D3;
 }
