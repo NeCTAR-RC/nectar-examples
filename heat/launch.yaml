@@ -20,7 +20,8 @@ Parameters:
 
 Resources:
 
-  # Creating a security group is possible: but it does eat into the number of groups that you are limited to (10)
+  # Needs a security group running on port 8080 to access it
+  # Remember creating a security group does eat into the number of groups that you are limited to (10)
   AlertsSecurityGroup:
     Type: "AWS::EC2::SecurityGroup"
     Properties:
