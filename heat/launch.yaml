@@ -1,0 +1,91 @@
+HeatTemplateFormatVersion: '2012-12-12'
+
+
+Description: 'Template to install the application on a NeCTAR instance'
+
+
+Parameters:
+
+  KeyName:
+    Description: Name of an existing KeyPair to enable SSH access to the instances
+    Type: String
+
+  InstanceType:
+    Description: The NeCTAR flavour the webserver is to run on
+    Type: String
+    Default: m1.small
+    AllowedValues: [m1.small, m1.medium, m1.large, m1.xlarge, m1.xxlarge]
+    ConstraintDescription: must be a valid NeCTAR flavour.
+
+
+Resources:
+
+  # Creating a security group is possible: but it does eat into the number of groups that you are limited to (10)
+  AlertsSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: "Enable HTTP access via port 80 plus SSH access"
+      SecurityGroupIngress:
+        -
+          IpProtocol: "icmp"
+          FromPort: "-1"
+          ToPort: "-1"
+          CidrIp: "0.0.0.0/0"
+        -
+          IpProtocol: "tcp"
+          FromPort: "8080"
+          ToPort: "8080"
+          CidrIp: "0.0.0.0/0"
+        -
+          IpProtocol: "tcp"
+          FromPort: "22"
+          ToPort: "22"
+          CidrIp: "0.0.0.0/0"
+  AlarmServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: a6dcb912-8307-4d35-861f-3e41ce994666
+      InstanceType: {Ref: InstanceType}
+      KeyName: {Ref: KeyName}
+      # the following are project specific, and will have to be adjusted.
+      SecurityGroups: [{Ref: AlertsSecurityGroup}]
+      # the following is written to /var/lib/cloud/data/cfn-userdata
+      # note the call to cfn-init which causes the AWS::CloudFomration::Init to be actioned
+      UserData: |
+        #!/bin/bash -v
+        sudo apt-get update && sudo apt-get -y upgrade
+
+        sudo apt-get -y install git
+
+        # time to sit back and smoke that cigar...
+        sudo apt-get -y install maven
+
+        # then java 8
+        sudo apt-get -y install python-software-properties
+
+        sudo add-apt-repository ppa:webupd8team/java -y
+        sudo apt-get -q -y update
+
+        # from http://askubuntu.com/questions/190582/installing-java-automatically-with-silent-option
+        echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
+        echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections
+
+        sudo apt-get install oracle-java8-installer -y
+
+        # set it as the default..
+        sudo apt-get install oracle-java8-set-default
+
+        git clone https://github.com/MartinPaulo/SparkProject.git
+        cd SparkProject
+        ./start.sh
+
+Outputs:
+
+  WebsiteURL:
+    Value:
+      Fn::Join:
+      - ''
+      - - http://
+        - Fn::GetAtt: [AlarmServer, PublicIp]
+        - :8080/
+    Description: URL for Alarm server
