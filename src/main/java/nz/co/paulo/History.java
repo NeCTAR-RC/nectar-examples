@@ -18,7 +18,9 @@ public class History {
     List<Row> rows;
 
     static class Row {
-        String alert, value, cssClass;
+        final String alert;
+        final String value;
+        final String cssClass;
         Row(String alert, String value, String cssClass) {
             this.alert = alert;
             this.value = value;

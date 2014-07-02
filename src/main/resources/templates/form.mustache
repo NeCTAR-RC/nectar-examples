@@ -11,7 +11,10 @@
 name of the alarm to be registered. Otherwise, simply fill in the name of the alarm below and submit the form.
 </p>
 <form action="alarm" method="post" autocomplete="on">
-    Alarm name:<input type="text" name="alarm_name"> <input type="submit" value="Submit">
+    <label>
+        Alarm name:
+        <input type="text" name="alarm_name">
+    </label> <input type="submit" value="Submit">
 </form>
 <p>To see the history: <a href="/history">to date</a></p>
 {{> pageFooter}}
