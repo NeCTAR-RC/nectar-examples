@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Alarms recorded</title>
+    <link rel="stylesheet" type="text/css" href="mainstay.css">
+</head>
+<body>
+<div class="border">
+    <p>
+        Average CPU load: {{averageLoad}}
+    </p>
+
+    <p>
+        Current CPU Load: {{systemCpuLoad}}
+    </p>
+
+    <p>
+        CPU load due to this webservice: {{cpuLoad}}
+    </p>
+</div>
+<p />
+<div class="border">
+    <form action="stress" method="post" autocomplete="on">
+        <label>
+            Number of CPU's:
+            <input type="radio" name="cpu_count" value="1">1</input>
+            <input type="radio" name="cpu_count" value="2">2</input>
+            <input type="radio" name="cpu_count" value="4">4</input>
+            <input type="radio" name="cpu_count" value="8">8</input>
+        </label>
+        <br/>
+        <label>
+            Timeout in seconds:
+            <input type="number" name="timeout" value="60">
+        </label>
+        <br/>
+        <input type="submit" value="Submit">
+    </form>
+</div>
+</body>
+</html>
