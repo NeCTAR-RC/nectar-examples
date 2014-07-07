@@ -23,7 +23,7 @@ public class Mainstay {
         pb = new ProcessBuilder();
         pb.redirectErrorStream(true);
         // http://linux.die.net/man/1/stress
-        pb.command("stress", "--cpu 8", "--timeout 10");
+        pb.command("stress", "--cpu 1", "--timeout 60");
 
         // we'll run on port 8080
         setPort(8080);
@@ -34,6 +34,7 @@ public class Mainstay {
     }
 
 
+    // http://www.xyzws.com/Javafaq/how-to-run-external-programs-by-using-java-processbuilder-class/189
     private static Response startStress(Request request, Response response) {
         if (process == null || !process.isAlive()) {
             try {
