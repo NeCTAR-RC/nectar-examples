@@ -38,6 +38,7 @@ public class Mainstay {
     private static Response startStress(Request request, Response response) {
         if (process == null || !process.isAlive()) {
             try {
+                System.out.println("Starting...");
                 process = pb.start();
             } catch (IOException e) {
                 process = null;
