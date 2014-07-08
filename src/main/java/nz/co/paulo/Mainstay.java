@@ -42,7 +42,7 @@ public class Mainstay {
 
         // we'll run on port 8080
         setPort(8080);
-        // we'll serve a css file from here, as well as the home page
+        // we'll serve a css file from here, as well as some javascript
         staticFileLocation("/public");
         get("/json", "application/json", (rq, rs) -> new PresentationModel(isNoProcess()), new JsonTransformer());
         get("/", (rq, rs) -> new PresentationModel(isNoProcess()).getTotals(), new MustacheTemplateEngine());
