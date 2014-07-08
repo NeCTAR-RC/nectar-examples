@@ -22,7 +22,7 @@ public class Mainstay {
 
     private static ProcessBuilder pb;
     private static Process process;
-    private static String[] command = {"stress", "--cpu", "1", "-timeout"," 60"};
+    private static String[] command = {"stress", "--cpu", "1", "--timeout"," 60"};
 
     public static void main(String[] args) {
         pb = new ProcessBuilder();
