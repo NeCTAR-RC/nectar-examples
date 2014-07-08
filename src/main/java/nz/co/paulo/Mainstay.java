@@ -1,8 +1,10 @@
 package nz.co.paulo;
 
 
+import com.google.gson.Gson;
 import spark.Request;
 import spark.Response;
+import spark.ResponseTransformer;
 import spark.template.mustache.MustacheTemplateEngine;
 
 import java.io.BufferedReader;
@@ -14,15 +16,24 @@ import java.util.concurrent.TimeUnit;
 
 import static spark.Spark.*;
 
+class JsonTransformer implements ResponseTransformer {
+
+    private Gson gson = new Gson();
+
+    @Override
+    public String render(Object model) throws Exception {
+        return gson.toJson(model);
+    }
+}
+
 /**
- * For more complex info consider: https://support.hyperic.com/display/SIGAR/Home
  * Created by Martin Paulo on 7/07/2014.
  */
 public class Mainstay {
 
     private static ProcessBuilder pb;
     private static Process process;
-    private static String[] command = {"stress", "--cpu", "1", "--timeout"," 60"};
+    private static String[] command = {"stress", "--cpu", "1", "--timeout","10"};
 
     public static void main(String[] args) {
         pb = new ProcessBuilder();
@@ -34,7 +45,8 @@ public class Mainstay {
         setPort(8080);
         // we'll serve a css file from here, as well as the home page
         staticFileLocation("/public");
-        get("/", "*", (rq, rs) -> new Totals().getTotals(), new MustacheTemplateEngine());
+        get("/json", "application/json", (rq, rs)-> new Totals(), new JsonTransformer());
+        get("/", (rq, rs) -> new Totals().getTotals(), new MustacheTemplateEngine());
         post("/stress", Mainstay::startStress);
     }
 
