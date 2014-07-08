@@ -35,6 +35,8 @@ public class Mainstay {
 
     private static ProcessBuilder pb;
     private static Process process;
+    private static Object lock = new Object();
+
     // http://linux.die.net/man/1/stress
     private static String[] command = {"stress", "--cpu", "1", "--timeout", "10"};
 
@@ -52,34 +54,18 @@ public class Mainstay {
     }
 
     private static Response startStress(Request request, Response response) {
-        if (isNoProcess()) {
-            try {
+        synchronized (lock) {
+            if (isNoProcess()) {
                 command[VALUE_CPU] = request.queryParams("cpu_count");
                 command[VALUE_TIMEOUT] = request.queryParams("timeout");
                 pb.command(command);
-//                System.out.printf("Starting  %s is:\n", Arrays.toString(command));
-                process = pb.start();
-//                InputStream is = process.getInputStream();
-//                InputStreamReader isr = new InputStreamReader(is);
-//                BufferedReader br = new BufferedReader(isr);
-//                String line;
-//                System.out.printf("Output of running %s is:\n", Arrays.toString(command));
-//                while ((line = br.readLine()) != null) {
-//                    System.out.println(line);
-//                }
-//
-//                //Wait to get exit value
-//                int exitValue = process.waitFor();
-//                System.out.println("\n\nExit Value is " + exitValue);
-            } catch (IOException e) {
-                process = null;
-                e.printStackTrace();
+                try {
+                    process = pb.start();
+                } catch (IOException e) {
+                    process = null;
+                    // e.printStackTrace();
+                }
             }
-//            process.waitFor(1, TimeUnit.SECONDS);
-//            if (process.isAlive()) {
-//                process.destroyForcibly();
-//            }
-
         }
         response.redirect("/");
         return response;
@@ -88,4 +74,25 @@ public class Mainstay {
     private static boolean isNoProcess() {
         return process == null || !process.isAlive();
     }
+
+// some of the things we can do with the process at a later date...
+//           System.out.printf("Starting  %s is:\n", Arrays.toString(command));
+//           InputStream is = process.getInputStream();
+//           InputStreamReader isr = new InputStreamReader(is);
+//           BufferedReader br = new BufferedReader(isr);
+//           String line;
+//           System.out.printf("Output of running %s is:\n", Arrays.toString(command));
+//           while ((line = br.readLine()) != null) {
+//                System.out.println(line);
+//           }
+//
+//           //Wait to get exit value
+//          int exitValue = process.waitFor();
+//          System.out.println("\n\nExit Value is " + exitValue);
+//          process.waitFor(1, TimeUnit.SECONDS);
+//          if (process.isAlive()) {
+//                process.destroyForcibly();
+//           }
+
+
 }
