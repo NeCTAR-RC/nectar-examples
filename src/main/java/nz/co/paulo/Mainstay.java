@@ -35,6 +35,7 @@ public class Mainstay {
 
     private static ProcessBuilder pb;
     private static Process process;
+    // http://linux.die.net/man/1/stress
     private static String[] command = {"stress", "--cpu", "1", "--timeout", "10"};
 
     public static void main(String[] args) {
@@ -50,16 +51,13 @@ public class Mainstay {
         post("/stress", Mainstay::startStress);
     }
 
-
-    // http://www.xyzws.com/Javafaq/how-to-run-external-programs-by-using-java-processbuilder-class/189
     private static Response startStress(Request request, Response response) {
         if (isNoProcess()) {
             try {
                 command[VALUE_CPU] = request.queryParams("cpu_count");
                 command[VALUE_TIMEOUT] = request.queryParams("timeout");
-                // http://linux.die.net/man/1/stress
                 pb.command(command);
-                System.out.printf("Starting  %s is:\n", Arrays.toString(command));
+//                System.out.printf("Starting  %s is:\n", Arrays.toString(command));
                 process = pb.start();
 //                InputStream is = process.getInputStream();
 //                InputStreamReader isr = new InputStreamReader(is);
@@ -71,7 +69,6 @@ public class Mainstay {
 //                }
 //
 //                //Wait to get exit value
-//
 //                int exitValue = process.waitFor();
 //                System.out.println("\n\nExit Value is " + exitValue);
             } catch (IOException e) {
