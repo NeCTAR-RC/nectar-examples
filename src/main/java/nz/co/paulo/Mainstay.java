@@ -31,21 +31,22 @@ class JsonTransformer implements ResponseTransformer {
  */
 public class Mainstay {
 
+    private static int VALUE_CPU = 2;
+    private static int VALUE_TIMEOUT = 4;
+
     private static ProcessBuilder pb;
     private static Process process;
-    private static String[] command = {"stress", "--cpu", "1", "--timeout","10"};
+    private static String[] command = {"stress", "--cpu", "1", "--timeout", "10"};
 
     public static void main(String[] args) {
         pb = new ProcessBuilder();
         pb.redirectErrorStream(true);
-        // http://linux.die.net/man/1/stress
-        pb.command(command);
 
         // we'll run on port 8080
         setPort(8080);
         // we'll serve a css file from here, as well as the home page
         staticFileLocation("/public");
-        get("/json", "application/json", (rq, rs)-> new Totals(), new JsonTransformer());
+        get("/json", "application/json", (rq, rs) -> new Totals(), new JsonTransformer());
         get("/", (rq, rs) -> new Totals().getTotals(), new MustacheTemplateEngine());
         post("/stress", Mainstay::startStress);
     }
@@ -55,22 +56,25 @@ public class Mainstay {
     private static Response startStress(Request request, Response response) {
         if (process == null || !process.isAlive()) {
             try {
-                System.out.println("Starting...");
+                command[VALUE_CPU] = request.queryParams("cpu_count");
+                command[VALUE_TIMEOUT] = request.queryParams("timeout");
+                // http://linux.die.net/man/1/stress
+                pb.command(command);
+                System.out.printf("Starting  %s is:\n", Arrays.toString(command));
                 process = pb.start();
                 InputStream is = process.getInputStream();
                 InputStreamReader isr = new InputStreamReader(is);
                 BufferedReader br = new BufferedReader(isr);
                 String line;
-                System.out.printf("Output of running %s is:\n",
-                        Arrays.toString(command));
+                System.out.printf("Output of running %s is:\n", Arrays.toString(command));
                 while ((line = br.readLine()) != null) {
                     System.out.println(line);
                 }
 
                 //Wait to get exit value
 
-                    int exitValue = process.waitFor();
-                    System.out.println("\n\nExit Value is " + exitValue);
+                int exitValue = process.waitFor();
+                System.out.println("\n\nExit Value is " + exitValue);
             } catch (IOException e) {
                 process = null;
                 e.printStackTrace();

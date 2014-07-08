@@ -9,31 +9,36 @@
 </head>
 <body>
 <div class="border">
+    <h2>Current server loads</h2>
+
     <p>
-        Average CPU load: <b id="averageLoad">{{averageLoad}}</b>
+        Average CPU: <b id="averageLoad">{{averageLoad}}</b>
     </p>
 
     <p>
-        Current CPU Load: <b id="systemCpuLoad">{{systemCpuLoad}}</b>
+        Current CPU: <b id="systemCpuLoad">{{systemCpuLoad}}</b>
     </p>
 
     <p>
-        CPU load due to this webservice: <b id="cpuLoad">{{cpuLoad}}</b>
+        CPU due to this webservice: <b id="cpuLoad">{{cpuLoad}}</b>
     </p>
 </div>
-<p />
+<p/>
+
 <div class="border">
+    <h2>Stress this server!</h2>
+
     <form action="stress" method="post" autocomplete="on">
         <label>
             Number of CPU's:
-            <input type="radio" name="cpu_count" value="1">1</input>
-            <input type="radio" name="cpu_count" value="2">2</input>
-            <input type="radio" name="cpu_count" value="4">4</input>
-            <input type="radio" name="cpu_count" value="8">8</input>
         </label>
+        <lable>1<input type="radio" name="cpu_count" value="1" checked/></lable>
+        <lable>2<input type="radio" name="cpu_count" value="2"/></lable>
+        <lable>4<input type="radio" name="cpu_count" value="4"/></lable>
+        <lable>8<input type="radio" name="cpu_count" value="8"/></lable>
         <br/>
         <label>
-            Timeout in seconds:
+            Duration in seconds:
             <input type="number" name="timeout" value="60">
         </label>
         <br/>
