@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Created by martinpaulo on 7/07/2014.
  */
-public class Totals {
+public class PresentationModel {
 
     private static OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(
             OperatingSystemMXBean.class);
@@ -23,7 +23,7 @@ public class Totals {
     String averageLoad;
     String disabled;
 
-    public Totals(boolean isNoProcessRunning) {
+    public PresentationModel(boolean isNoProcessRunning) {
         averageLoad = getFormatted(osBean.getSystemLoadAverage());
         systemCpuLoad = getFormatted(osBean.getSystemCpuLoad());
         cpuLoad = getFormatted(osBean.getProcessCpuLoad());

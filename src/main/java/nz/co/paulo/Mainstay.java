@@ -7,11 +7,7 @@ import spark.Response;
 import spark.ResponseTransformer;
 import spark.template.mustache.MustacheTemplateEngine;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Arrays;
 
 import static spark.Spark.*;
 
@@ -48,8 +44,8 @@ public class Mainstay {
         setPort(8080);
         // we'll serve a css file from here, as well as the home page
         staticFileLocation("/public");
-        get("/json", "application/json", (rq, rs) -> new Totals(isNoProcess()), new JsonTransformer());
-        get("/", (rq, rs) -> new Totals(isNoProcess()).getTotals(), new MustacheTemplateEngine());
+        get("/json", "application/json", (rq, rs) -> new PresentationModel(isNoProcess()), new JsonTransformer());
+        get("/", (rq, rs) -> new PresentationModel(isNoProcess()).getTotals(), new MustacheTemplateEngine());
         post("/stress", Mainstay::startStress);
     }
 
