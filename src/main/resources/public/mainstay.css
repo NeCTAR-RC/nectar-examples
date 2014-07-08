@@ -49,6 +49,7 @@ input[type=text] {
     padding: 5px;
     border: 2px solid #ccc;
     border-radius: 5px;
+    font-size: 100%;
 }
 
 input[type=text]:focus {
@@ -63,4 +64,5 @@ input[type=submit] {
     color: white;
     cursor: pointer;
     border-radius: 5px;
+    font-size: 100%;
 }
