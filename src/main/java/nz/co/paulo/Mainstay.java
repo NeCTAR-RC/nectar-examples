@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
 
 import static spark.Spark.*;
 
@@ -46,15 +45,15 @@ public class Mainstay {
         setPort(8080);
         // we'll serve a css file from here, as well as the home page
         staticFileLocation("/public");
-        get("/json", "application/json", (rq, rs) -> new Totals(), new JsonTransformer());
-        get("/", (rq, rs) -> new Totals().getTotals(), new MustacheTemplateEngine());
+        get("/json", "application/json", (rq, rs) -> new Totals(isNoProcess()), new JsonTransformer());
+        get("/", (rq, rs) -> new Totals(isNoProcess()).getTotals(), new MustacheTemplateEngine());
         post("/stress", Mainstay::startStress);
     }
 
 
     // http://www.xyzws.com/Javafaq/how-to-run-external-programs-by-using-java-processbuilder-class/189
     private static Response startStress(Request request, Response response) {
-        if (process == null || !process.isAlive()) {
+        if (isNoProcess()) {
             try {
                 command[VALUE_CPU] = request.queryParams("cpu_count");
                 command[VALUE_TIMEOUT] = request.queryParams("timeout");
@@ -62,23 +61,21 @@ public class Mainstay {
                 pb.command(command);
                 System.out.printf("Starting  %s is:\n", Arrays.toString(command));
                 process = pb.start();
-                InputStream is = process.getInputStream();
-                InputStreamReader isr = new InputStreamReader(is);
-                BufferedReader br = new BufferedReader(isr);
-                String line;
-                System.out.printf("Output of running %s is:\n", Arrays.toString(command));
-                while ((line = br.readLine()) != null) {
-                    System.out.println(line);
-                }
-
-                //Wait to get exit value
-
-                int exitValue = process.waitFor();
-                System.out.println("\n\nExit Value is " + exitValue);
+//                InputStream is = process.getInputStream();
+//                InputStreamReader isr = new InputStreamReader(is);
+//                BufferedReader br = new BufferedReader(isr);
+//                String line;
+//                System.out.printf("Output of running %s is:\n", Arrays.toString(command));
+//                while ((line = br.readLine()) != null) {
+//                    System.out.println(line);
+//                }
+//
+//                //Wait to get exit value
+//
+//                int exitValue = process.waitFor();
+//                System.out.println("\n\nExit Value is " + exitValue);
             } catch (IOException e) {
                 process = null;
-                e.printStackTrace();
-            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 //            process.waitFor(1, TimeUnit.SECONDS);
@@ -89,5 +86,9 @@ public class Mainstay {
         }
         response.redirect("/");
         return response;
+    }
+
+    private static boolean isNoProcess() {
+        return process == null || !process.isAlive();
     }
 }

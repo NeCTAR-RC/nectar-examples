@@ -21,11 +21,17 @@ public class Totals {
     String cpuLoad;
     String systemCpuLoad;
     String averageLoad;
+    String disabled;
 
-    public Totals() {
-        averageLoad = format.format(osBean.getSystemLoadAverage());
-        systemCpuLoad = format.format(osBean.getSystemCpuLoad());
-        cpuLoad = format.format(osBean.getProcessCpuLoad());
+    public Totals(boolean isNoProcessRunning) {
+        averageLoad = getFormatted(osBean.getSystemLoadAverage());
+        systemCpuLoad = getFormatted(osBean.getSystemCpuLoad());
+        cpuLoad = getFormatted(osBean.getProcessCpuLoad());
+        this.disabled = isNoProcessRunning ? "" : "disabled";
+    }
+
+    private String getFormatted(double sample) {
+        return format.format(sample);
     }
 
     public ModelAndView getTotals() {

@@ -19,9 +19,6 @@
         Current CPU: <b id="systemCpuLoad">{{systemCpuLoad}}</b>
     </p>
 
-    <p>
-        CPU due to this webservice: <b id="cpuLoad">{{cpuLoad}}</b>
-    </p>
 </div>
 <p/>
 
@@ -29,20 +26,22 @@
     <h2>Stress this server!</h2>
 
     <form action="stress" method="post" autocomplete="on">
-        <label>
-            Number of CPU's:
-        </label>
-        <lable>1<input type="radio" name="cpu_count" value="1" checked/></lable>
-        <lable>2<input type="radio" name="cpu_count" value="2"/></lable>
-        <lable>4<input type="radio" name="cpu_count" value="4"/></lable>
-        <lable>8<input type="radio" name="cpu_count" value="8"/></lable>
-        <br/>
-        <label>
-            Duration in seconds:
-            <input type="number" name="timeout" value="60">
-        </label>
-        <br/>
-        <input type="submit" value="Submit">
+        <fieldset id="form" {{disabled}}>
+            <label>
+                Number of CPU's:
+            </label>
+            <lable>1<input type="radio" name="cpu_count" value="1" checked/></lable>
+            <lable>2<input type="radio" name="cpu_count" value="2"/></lable>
+            <lable>4<input type="radio" name="cpu_count" value="4"/></lable>
+            <lable>8<input type="radio" name="cpu_count" value="8"/></lable>
+            <br/>
+            <label>
+                Duration in seconds:
+                <input type="number" name="timeout" value="60">
+            </label>
+            <br/>
+            <input type="submit" value="Submit">
+        </fieldset>
     </form>
 </div>
 </body>
