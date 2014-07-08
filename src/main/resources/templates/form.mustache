@@ -1,20 +1,28 @@
 {{> pageHeader}}
-<h1>Mock ceilometer alarm</h1>
-<p>
-    To register an alarm call via curl, simply do:
-</p>
-<code>
-    curl -X POST http://localhost:8080/alarm/some_alarm
-</code>
-<p>
-    Here <pre>localhost</pre> is the host running the application and <pre>some_alarm</pre> is the
-name of the alarm to be registered. Otherwise, simply fill in the name of the alarm below and submit the form.
-</p>
-<form action="alarm" method="post" autocomplete="on">
-    <label>
-        Alarm name:
-        <input type="text" name="alarm_name">
-    </label> <input type="submit" value="Submit">
-</form>
+<div class="border">
+    <h1>Mock ceilometer alarm</h1>
+
+    <p>
+        To register an alarm call via curl, simply do:
+    </p>
+    <code>
+        curl -X POST http://localhost:8080/alarm/some_alarm
+    </code>
+
+    <p>
+        Here
+    <pre>localhost</pre>
+    is the host running the application and
+    <pre>some_alarm</pre>
+    is the
+    name of the alarm to be registered. Otherwise, simply fill in the name of the alarm below and submit the form.
+    </p>
+    <form action="alarm" method="post" autocomplete="on">
+        <label>
+            Alarm name:
+            <input type="text" name="alarm_name">
+        </label> <input type="submit" value="Submit">
+    </form>
+</div>
 <p>To see the history: <a href="/history">to date</a></p>
 {{> pageFooter}}

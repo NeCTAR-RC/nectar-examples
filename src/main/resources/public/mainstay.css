@@ -1,5 +1,7 @@
 table, td, th {
     border: 1px solid green;
+    margin-left:auto;
+    margin-right:auto;
 }
 
 th {
@@ -9,6 +11,12 @@ th {
     padding-bottom: 4px;
     background-color: #A7C942;
     color: #ffffff;
+}
+
+div.table {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
 }
 
 tr.even td {
@@ -24,10 +32,35 @@ td {
 
 body {
     color: #333333;
-    font-family: "Myriad Pro",Verdana,Arial,Helvetica,sans-serif;
+    font-family: "Myriad Pro", Verdana, Arial, Helvetica, sans-serif;
     font-size: 100%;
     line-height: 145%;
     text-align: center;
-    background-color: lightgoldenrodyellow;
 }
 
+div.border {
+    border: 5px solid darkgreen;
+    background-color: lightgoldenrodyellow;
+    border-radius: 10px;
+}
+
+input[type=text] {
+    margin: 10px;
+    padding: 5px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+}
+
+input[type=text]:focus {
+    border-color: #006400;
+}
+
+input[type=submit] {
+    margin: 5px;
+    padding: 5px 15px;
+    border: 3px darkgreen;
+    background: #006400;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}

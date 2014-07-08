@@ -1,16 +1,21 @@
 {{> pageHeader}}
-<h2>Recorded so far</h2>
-<table>
-    <tr>
-        <th>Alarm</th>
-        <th>Times Called</th>
-    </tr>
-    {{#rows}}
-        <tr class="{{cssClass}}">
-            <td>{{alert}}</td>
-            <td>{{value}}</td>
-        </tr>
-    {{/rows}}
-</table>
+<div class="border">
+    <h2>Recorded so far</h2>
+
+    <div class="table">
+        <table>
+            <tr>
+                <th>Alarm</th>
+                <th>Times Called</th>
+            </tr>
+            {{#rows}}
+                <tr class="{{cssClass}}">
+                    <td>{{alert}}</td>
+                    <td>{{value}}</td>
+                </tr>
+            {{/rows}}
+        </table>
+    </div>
+</div>
 <p>To trigger an alarm: <a href="/alarm">manually</a></p>
 {{> pageFooter}}
