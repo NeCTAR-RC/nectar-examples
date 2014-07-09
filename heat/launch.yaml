@@ -25,7 +25,7 @@ Resources:
   AlertsSecurityGroup:
     Type: "AWS::EC2::SecurityGroup"
     Properties:
-      GroupDescription: "Enable HTTP access via port 80 plus SSH access"
+      GroupDescription: "Enable ping, HTTP access via port 8080 and SSH access"
       SecurityGroupIngress:
         -
           IpProtocol: "icmp"
