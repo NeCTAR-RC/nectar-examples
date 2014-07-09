@@ -30,14 +30,14 @@
             <label>
                 Number of CPU's:
             </label>
-            <lable>1<input type="radio" name="cpu_count" value="1" checked/></lable>
-            <lable>2<input type="radio" name="cpu_count" value="2"/></lable>
-            <lable>4<input type="radio" name="cpu_count" value="4"/></lable>
-            <lable>8<input type="radio" name="cpu_count" value="8"/></lable>
+            <lable>1<input id="oneIsDefault" type="radio" name="cpu_count" value="1"{{#oneIsDefault}} checked {{/oneIsDefault}}/></lable>
+            <lable>2<input id="twoIsDefault" type="radio" name="cpu_count" value="2"{{#twoIsDefault}} checked {{/twoIsDefault}}/></lable>
+            <lable>4<input id="fourIsDefault"  type="radio" name="cpu_count" value="4"{{#fourIsDefault}} checked {{/fourIsDefault}}/></lable>
+            <lable>8<input id="eightIsDefault"  type="radio" name="cpu_count" value="8"{{#eightIsDefault}} checked {{/eightIsDefault}}/></lable>
             <br/>
             <label>
                 Duration in seconds:
-                <input type="number" name="timeout" value="60">
+                <input type="number" id="timeout" name="timeout" value="{{timeout}}">
             </label>
             <br/>
             <input type="submit" value="Submit">

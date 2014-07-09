@@ -6,6 +6,7 @@ import spark.Response;
 import spark.ResponseTransformer;
 import spark.template.mustache.MustacheTemplateEngine;
 import java.io.IOException;
+import java.util.Arrays;
 
 import static spark.Spark.*;
 
@@ -42,12 +43,20 @@ public class Mainstay {
         setPort(8080);
         // we'll serve a css file from here, as well as some javascript
         staticFileLocation("/public");
-        get("/json", "application/json", (rq, rs) -> new PresentationModel(isNoProcess()), new JsonTransformer());
-        get("/", (rq, rs) -> new PresentationModel(isNoProcess()).getTotals(), new MustacheTemplateEngine());
+        get("/json", "application/json", (rq, rs) -> getPresentationModel(), new JsonTransformer());
+        get("/", (rq, rs) -> getPresentationModel().getTotals(), new MustacheTemplateEngine());
         post("/stress", Mainstay::startStress);
     }
 
+    private static PresentationModel getPresentationModel() {
+        PresentationModel pm = new PresentationModel(isNoProcess());
+        pm.setTimeout(command[VALUE_TIMEOUT]);
+        pm.setIsDefault(command[VALUE_CPU]);
+        return pm;
+    }
+
     private static Response startStress(Request request, Response response) {
+        System.out.printf("Starting  %s is:\n", Arrays.toString(command));
         synchronized (lock) {
             if (isNoProcess()) {
                 command[VALUE_CPU] = request.queryParams("cpu_count");
@@ -70,7 +79,6 @@ public class Mainstay {
     }
 
 // some of the things we can do with the process at a later date...
-//           System.out.printf("Starting  %s is:\n", Arrays.toString(command));
 //           InputStream is = process.getInputStream();
 //           InputStreamReader isr = new InputStreamReader(is);
 //           BufferedReader br = new BufferedReader(isr);

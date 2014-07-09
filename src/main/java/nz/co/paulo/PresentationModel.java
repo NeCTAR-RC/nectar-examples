@@ -2,6 +2,7 @@ package nz.co.paulo;
 
 import com.sun.management.OperatingSystemMXBean;
 import spark.ModelAndView;
+
 import java.lang.management.ManagementFactory;
 import java.text.DecimalFormat;
 
@@ -34,6 +35,12 @@ public class PresentationModel {
      */
     String averageLoad;
     String disabled;
+    String timeout;
+    boolean oneIsDefault;
+    boolean twoIsDefault;
+    boolean fourIsDefault;
+    boolean eightIsDefault;
+
 
     public PresentationModel(boolean isNoProcessRunning) {
         averageLoad = getFormatted(osBean.getSystemLoadAverage());
@@ -50,4 +57,28 @@ public class PresentationModel {
         return new ModelAndView(this, "index.mustache");
     }
 
+    public void setTimeout(String timeout) {
+        this.timeout = timeout;
+    }
+
+    public void setIsDefault(String isDefault) {
+        oneIsDefault = false;
+        twoIsDefault = false;
+        fourIsDefault = false;
+        eightIsDefault = false;
+        switch (isDefault) {
+            case "1":
+                oneIsDefault = true;
+                break;
+            case "2":
+                twoIsDefault = true;
+                break;
+            case "4":
+                fourIsDefault = true;
+                break;
+            case "8":
+                eightIsDefault = true;
+                break;
+        }
+    }
 }
