@@ -1,12 +1,10 @@
 package nz.co.paulo;
 
-
 import com.google.gson.Gson;
 import spark.Request;
 import spark.Response;
 import spark.ResponseTransformer;
 import spark.template.mustache.MustacheTemplateEngine;
-
 import java.io.IOException;
 
 import static spark.Spark.*;
