@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Stress this machine</title>
+    <link rel="stylesheet" type="text/css" href="mainstay.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="mainstay.js"></script>
+</head>
+<body>
+<div class="border">
+    <h2>Disk access speeds</h2>
+
+    <div class="code">
+        <code>
+        {{#results}}
+           {{line}}<br />
+        {{/results}}
+        </code>
+    </div>
+
+</div>
+<p/>
+
+<div class="border">
+    <h2>Again, Again</h2>
+
+    <form action="write" method="post" >
+        <fieldset id="form" {{disabled}}>
+            <input type="submit" value="Do it again!">
+        </fieldset>
+    </form>
+</div>
+</body>
+</html>

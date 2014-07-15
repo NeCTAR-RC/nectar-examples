@@ -1,0 +1,116 @@
+HeatTemplateFormatVersion: '2012-12-12'
+
+
+Description: 'Template to install the application on a NeCTAR instance'
+
+
+Parameters:
+
+  KeyName:
+    Description: Name of an existing KeyPair to enable SSH access to the instances
+    Type: String
+
+  InstanceType:
+    Description: The NeCTAR flavour the webserver is to run on
+    Type: String
+    Default: m1.small
+    AllowedValues: [m1.small, m1.medium, m1.large, m1.xlarge, m1.xxlarge]
+    ConstraintDescription: must be a valid NeCTAR flavour.
+  AvailabilityZone:
+    Type: String
+    Description: The NeCTAR zone in which the VM is to run (must have block storage)
+    Default: melbourne-np
+    AllowedValues: [melbourne-qh2, melbourne-np, monash, qld]
+
+
+Resources:
+
+  # Needs a security group running on port 8080 to access it
+  # Remember creating a security group does eat into the number of groups that you are limited to (10)
+  AlertsSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: "Enable ping, HTTP access via port 8080 and SSH access"
+      SecurityGroupIngress:
+        -
+          IpProtocol: "icmp"
+          FromPort: "-1"
+          ToPort: "-1"
+          CidrIp: "0.0.0.0/0"
+        -
+          IpProtocol: "tcp"
+          FromPort: "8080"
+          ToPort: "8080"
+          CidrIp: "0.0.0.0/0"
+        -
+          IpProtocol: "tcp"
+          FromPort: "22"
+          ToPort: "22"
+          CidrIp: "0.0.0.0/0"
+  CinderVolume:
+    Type: OS::Cinder::Volume
+    Properties:
+      # small, but this is just a demo
+      size: "2"
+      availability_zone: { Ref: AvailabilityZone }
+  DiskTesterMachine:
+    Type: AWS::EC2::Instance
+    Properties:
+      AvailabilityZone: { Ref: AvailabilityZone }
+      ImageId: a6dcb912-8307-4d35-861f-3e41ce994666
+      InstanceType: {Ref: InstanceType}
+      KeyName: {Ref: KeyName}
+      # the following are project specific, and will have to be adjusted.
+      SecurityGroups: [{Ref: AlertsSecurityGroup}]
+      # the following is written to /var/lib/cloud/data/cfn-userdata
+      # note the call to cfn-init which causes the AWS::CloudFomration::Init to be actioned
+      UserData: |
+        #!/bin/bash -v
+        apt-get update && sudo apt-get -y upgrade
+
+        mkdir /block
+        mkdir /transient
+
+        mount /dev/vdc /block
+        mount /dev/vdb /transient
+
+        apt-get -y install git
+
+        # time to sit back and smoke that cigar...
+        apt-get -y install maven
+
+        # then java 8
+        apt-get -y install python-software-properties
+
+        add-apt-repository ppa:webupd8team/java -y
+        apt-get -q -y update
+
+        # from http://askubuntu.com/questions/190582/installing-java-automatically-with-silent-option
+        echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
+        echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections
+
+        apt-get install oracle-java8-installer -y
+
+        # set it as the default..
+        apt-get install oracle-java8-set-default
+
+        git clone https://github.com/MartinPaulo/SparkDiskTester.git
+        cd SparkDiskTester
+        ./start.sh
+  VolumeAttachment:
+    Type: OS::Cinder::VolumeAttachment
+    Properties:
+      volume_id: { Ref: CinderVolume }
+      instance_uuid: { Ref: DiskTesterMachine }
+      mountpoint: /dev/vdc
+
+Outputs:
+
+  WebsiteURL:
+    Value:
+      Fn::Join:
+      - ''
+      - - http://
+        - Fn::GetAtt: [DiskTesterMachine, PublicIp]
+        - :8080/
+    Description: URL for stressed server
