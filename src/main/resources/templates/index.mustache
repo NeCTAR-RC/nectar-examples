@@ -11,12 +11,13 @@
 <div class="border">
     <h2>Disk access speeds</h2>
 
-    <p>This program simply writes chunks of text data of different sized to the instance drive, the transient storage
+    <p>This program simply wrote and read chunks of text data of different sized to the instance drive, the transient storage
         and the block storage. The times taken to read and write the files are recorded and shown.</p>
 
     <p>
-        The results of this test are probably meaningless. In this environment you have things such as networks, memory
-        caches etc. All of which conspire to distort any results...
+        The results of this test are mostly meaningless. In this environment you have things such as networks, memory
+        caches etc. All of which conspire to distort any results... However, it does give you some idea as to how
+        your application may fare when accessing files on the different file storage mediums.
     </p>
 
     <div class="code">
@@ -30,7 +31,7 @@
 </div>
 <p/>
 
-<div class="border">
+<!--div class="border">
     <h2>Again, Again</h2>
 
     <form action="write" method="post">
@@ -38,6 +39,6 @@
             <input type="submit" value="Do it again!">
         </fieldset>
     </form>
-</div>
+</div -->
 </body>
 </html>
