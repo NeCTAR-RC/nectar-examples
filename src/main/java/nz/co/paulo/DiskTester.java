@@ -28,7 +28,7 @@ public class DiskTester {
     }
 
 
-    private static final String[] directories = {"~", "/transient", "/block"};
+    private static final String[] directories = {"/root", "/transient", "/block"};
 
     public static final String WRITE_RESULT = "Took %.3f seconds to write to a %d MB, file rate: %.1f MB/s%n";
     public static final String READ_RESULT = "Took %.3f seconds to read to a %d MB file, rate: %.1f MB/s%n";
@@ -40,8 +40,8 @@ public class DiskTester {
             if (Files.exists(target_dir)) {
                 for (int mb : new int[]{50, 100, 250, 500, 1000, 2000}) {
                     Path target = Paths.get(directory, "test.txt");
-                    result.add(new Row("Now testing"  + target));
-                    //result.addAll(testFileSize(mb, target));
+                    result.add(new Row("Now testing: "  + target));
+                    result.addAll(testFileSize(mb, target));
                 }
             } else {
                 result.add(new Row("Skipped " + target_dir + " as it does not exist."));
