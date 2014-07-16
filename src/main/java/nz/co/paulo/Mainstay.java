@@ -19,6 +19,7 @@ public class Mainstay {
         try {
             c.results.addAll(DiskTester.testStorage());
         } catch (IOException e) {
+            c.results.add(new DiskTester.Row("Exception: " + e.getMessage()));
             for (StackTraceElement element: e.getStackTrace()) {
                 c.results.add(new DiskTester.Row(element.toString()));
             }
