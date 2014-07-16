@@ -25,31 +25,29 @@ public class DiskTester {
 
     private static final String[] directories = {"/root", "/transient", "/block"};
 
-    public static final String WRITE_RESULT = "Took %.3f seconds to write to a %d MB, file rate: %.1f MB/s%n";
-    public static final String READ_RESULT = "Took %.3f seconds to read to a %d MB file, rate: %.1f MB/s%n";
+    public static final String WRITE_RESULT = "It took %.3f seconds to write a %d MB, file rate: %.1f MB/s%n";
+    public static final String READ_RESULT =  "It took %.3f seconds to read  a %d MB file, rate: %.1f MB/s%n";
 
     public static List<Row> testStorage() throws IOException {
         ArrayList<Row> result = new ArrayList<>();
         for (String directory : directories) {
-            Path target_dir = Paths.get(directory);
-            if (Files.exists(target_dir)) {
-                Path target = Paths.get(directory, "test.txt");
-                result.add(new Row("Now testing: " + target));
+            if (Files.exists(Paths.get(directory))) {
+                result.add(new Row("Now testing: " + directory));
                 for (int mb : new int[]{50, 100, 250, 500, 1000, 2000}) {
-                    result.addAll(testFileSize(mb, target));
+                    result.addAll(testFileSize(mb, directory));
                 }
             } else {
-                result.add(new Row("Skipped " + target_dir + " as it does not exist."));
+                result.add(new Row("Skipped " + directory + " as it does not exist."));
             }
         }
         return result;
     }
 
-    private static List<Row> testFileSize(int mb, Path path) throws IOException {
+    private static List<Row> testFileSize(int mb, String directory) throws IOException {
         ArrayList<Row> result = new ArrayList<>();
-        System.out.println("Now testing: " + path + " at " + Integer.toString(mb) + " MB");
-        File file = Files.createFile(path).toFile();
-        file.deleteOnExit();
+        Path target = Paths.get(directory, "write.txt");
+        System.out.println("Now testing: " + target + " at " + Integer.toString(mb) + " MB");
+        File file = Files.createFile(target).toFile();
         char[] chars = new char[1024];
         Arrays.fill(chars, 'A');
         String longLine = new String(chars);
@@ -61,15 +59,21 @@ public class DiskTester {
         pw.close();
         long time1 = System.nanoTime() - start1;
         result.add(new Row(String.format(WRITE_RESULT, time1 / 1e9, file.length() >> 20, file.length() * 1000.0 / time1)));
-        long start2 = System.nanoTime();
-        BufferedReader br = new BufferedReader(new FileReader(file));
-        for (String line; (line = br.readLine()) != null; ) {
-            // we don't do anything with it.
+        try {
+            target = Paths.get(directory, "read.txt");
+            file.renameTo(target.toFile());
+            file = Files.createFile(target).toFile();
+            long start2 = System.nanoTime();
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            for (String line; (line = br.readLine()) != null; ) {
+                // we don't do anything with it.
+            }
+            br.close();
+            long time2 = System.nanoTime() - start2;
+            result.add(new Row(String.format(READ_RESULT, time2 / 1e9, file.length() >> 20, file.length() * 1000.0 / time2)));
+        } finally {
+            file.delete();
         }
-        br.close();
-        long time2 = System.nanoTime() - start2;
-        result.add(new Row(String.format(READ_RESULT, time2 / 1e9, file.length() >> 20, file.length() * 1000.0 / time2)));
-        file.delete();
         return result;
     }
 
