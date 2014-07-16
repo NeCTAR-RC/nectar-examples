@@ -11,11 +11,21 @@
 <div class="border">
     <h2>Disk access speeds</h2>
 
+    <p>This program simply writes chunks of text data of different sized to the instance drive, the transient storage
+        and the block storage.
+        The times taken to read and write the files are recorded and shown.</p>
+
+    <p>
+        The results of this test are probably meaningless. In this environment you have things such as networks, memory
+        caches etc.
+        All of which conspire to distort any results...
+    </p>
+
     <div class="code">
         <code>
-        {{#results}}
-           {{line}}<br />
-        {{/results}}
+            {{#results}}
+                {{line}}<br/>
+            {{/results}}
         </code>
     </div>
 
@@ -25,7 +35,7 @@
 <div class="border">
     <h2>Again, Again</h2>
 
-    <form action="write" method="post" >
+    <form action="write" method="post">
         <fieldset id="form" {{disabled}}>
             <input type="submit" value="Do it again!">
         </fieldset>

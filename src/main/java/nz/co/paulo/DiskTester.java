@@ -10,19 +10,14 @@ import java.util.List;
 
 /**
  * // http://stackoverflow.com/questions/13155700/fastest-way-to-read-and-write-large-files-line-by-line-in-java
- * The results of such a benchmark are more or less useless. First of all, when writing a file, closing the
- * output stream does not ensure that all data has been written physically to the disk. It may still lurk around in a
- * memory buffer on the OS level or on the harddisk. If you read the exact same file directly after you have written
- * it, the data will most likely be read from a memory buffer and not physically from disk.
- * According to this benchmark, my laptop HDD comes close to 500MB/s both for reading and writing and
- * that is probably somewhere around 10x the true performance.
  * Created by paulo on 14/07/2014.
  */
 public class DiskTester {
 
     public static class Row {
         String line;
-        public Row (String line) {
+
+        public Row(String line) {
             this.line = line;
         }
     }
@@ -38,9 +33,9 @@ public class DiskTester {
         for (String directory : directories) {
             Path target_dir = Paths.get(directory);
             if (Files.exists(target_dir)) {
+                Path target = Paths.get(directory, "test.txt");
+                result.add(new Row("Now testing: " + target));
                 for (int mb : new int[]{50, 100, 250, 500, 1000, 2000}) {
-                    Path target = Paths.get(directory, "test.txt");
-                    result.add(new Row("Now testing: "  + target));
                     result.addAll(testFileSize(mb, target));
                 }
             } else {
@@ -52,7 +47,7 @@ public class DiskTester {
 
     private static List<Row> testFileSize(int mb, Path path) throws IOException {
         ArrayList<Row> result = new ArrayList<>();
-
+        System.out.println("Now testing: " + path + " at " + Integer.toString(mb) + " MB");
         File file = Files.createFile(path).toFile();
         file.deleteOnExit();
         char[] chars = new char[1024];
