@@ -54,27 +54,27 @@ Resources:
       # note the call to cfn-init which causes the AWS::CloudFomration::Init to be actioned
       UserData: |
         #!/bin/bash -v
-        sudo apt-get update && sudo apt-get -y upgrade
+        apt-get update && sudo apt-get -y upgrade
 
-        sudo apt-get -y install git
+        apt-get -y install git
 
         # time to sit back and smoke that cigar...
-        sudo apt-get -y install maven
+        apt-get -y install maven
 
         # then java 8
-        sudo apt-get -y install python-software-properties
+        apt-get -y install python-software-properties
 
-        sudo add-apt-repository ppa:webupd8team/java -y
-        sudo apt-get -q -y update
+        add-apt-repository ppa:webupd8team/java -y
+        apt-get -q -y update
 
         # from http://askubuntu.com/questions/190582/installing-java-automatically-with-silent-option
         echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
         echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections
 
-        sudo apt-get install oracle-java8-installer -y
+        apt-get install oracle-java8-installer -y
 
         # set it as the default..
-        sudo apt-get install oracle-java8-set-default
+        apt-get install oracle-java8-set-default
 
         #install stress
         apt-get -y install stress
