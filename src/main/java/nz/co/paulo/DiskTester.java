@@ -62,7 +62,7 @@ public class DiskTester {
         try {
             target = Paths.get(directory, "read.txt");
             file.renameTo(target.toFile());
-            file = Files.createFile(target).toFile();
+            file = target.toFile();
             long start2 = System.nanoTime();
             BufferedReader br = new BufferedReader(new FileReader(file));
             for (String line; (line = br.readLine()) != null; ) {
