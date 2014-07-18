@@ -22,13 +22,45 @@ public class DiskTester {
         }
     }
 
+    public static class Context {
+
+        ArrayList<DiskTester.Row> results = new ArrayList<>();
+
+        @SuppressWarnings("CloneDoesntCallSuperClone")
+        @Override
+        public synchronized Context clone() {
+            Context copy = new Context();
+            copy.results.addAll(results);
+            return copy;
+        }
+
+    }
 
     private static final String[] directories = {"/root", "/transient", "/block"};
 
     public static final String WRITE_RESULT = "It took %.3f seconds to write a %d MB, file rate: %.1f MB/s%n";
-    public static final String READ_RESULT =  "It took %.3f seconds to read  a %d MB file, rate: %.1f MB/s%n";
+    public static final String READ_RESULT = "It took %.3f seconds to read  a %d MB file, rate: %.1f MB/s%n";
 
-    public static void testStorage(ArrayList<Row> results) throws IOException {
+    private static Context context = new Context();
+
+    public static void testStorage() {
+        new Thread(() -> {
+            try {
+                DiskTester.testStorage(context.results);
+            } catch (IOException e) {
+                context.results.add(new DiskTester.Row("Exception: " + e.getMessage()));
+                for (StackTraceElement element : e.getStackTrace()) {
+                    context.results.add(new DiskTester.Row(element.toString()));
+                }
+            }
+        }).start();
+    }
+
+    public static Context getResults() {
+        return context.clone();
+    }
+
+    private static void testStorage(ArrayList<Row> results) throws IOException {
         for (String directory : directories) {
             if (Files.exists(Paths.get(directory))) {
                 results.add(new Row("Now testing: " + directory));
@@ -44,7 +76,7 @@ public class DiskTester {
     private static List<Row> testFileSize(int mb, String directory) throws IOException {
         ArrayList<Row> result = new ArrayList<>();
         Path target = Paths.get(directory, "write.txt");
-        System.out.println("Now testing: " + target + " at " + Integer.toString(mb) + " MB");
+        //System.out.println("Now testing: " + target + " at " + Integer.toString(mb) + " MB");
         File file = Files.createFile(target).toFile();
         char[] chars = new char[1024];
         Arrays.fill(chars, 'A');
