@@ -16,11 +16,24 @@ Parameters:
     Default: m1.small
     AllowedValues: [m1.small, m1.medium, m1.large, m1.xlarge, m1.xxlarge]
     ConstraintDescription: must be a valid NeCTAR flavour.
+
   AvailabilityZone:
     Type: String
     Description: The NeCTAR zone in which the VM is to run (must have block storage)
     Default: melbourne-np
     AllowedValues: [melbourne-qh2, melbourne-np, monash, qld]
+
+  ImageName:
+    Type: String
+    Description: Name of the image to use for the instance to be created
+    Default: 'NeCTAR Ubuntu 14.04 (Trusty) amd64'
+    AllowedValues: ['NeCTAR Ubuntu 13.10 (Saucy) amd64', 'NeCTAR Ubuntu 14.04 (Trusty) amd64']
+
+Mappings:
+
+  InstanceId:
+   'NeCTAR Ubuntu 13.10 (Saucy) amd64': {ImageId: a6dcb912-8307-4d35-861f-3e41ce994666}
+   'NeCTAR Ubuntu 14.04 (Trusty) amd64': {ImageId: 26955e70-9da0-44d4-b3f8-e5276e989fdb}
 
 
 Resources:
@@ -47,17 +60,23 @@ Resources:
           FromPort: "22"
           ToPort: "22"
           CidrIp: "0.0.0.0/0"
+
   CinderVolume:
     Type: OS::Cinder::Volume
     Properties:
       # small, but this is just a demo
-      size: "2"
+      size: "3"
       availability_zone: { Ref: AvailabilityZone }
+
   DiskTesterMachine:
     Type: AWS::EC2::Instance
     Properties:
       AvailabilityZone: { Ref: AvailabilityZone }
-      ImageId: 26955e70-9da0-44d4-b3f8-e5276e989fdb
+      ImageId:
+        Fn::FindInMap:
+        - InstanceId
+        - {Ref: ImageName}
+        - ImageId
       InstanceType: {Ref: InstanceType}
       KeyName: {Ref: KeyName}
       SecurityGroups: [{Ref: AlertsSecurityGroup}]
@@ -65,11 +84,13 @@ Resources:
         #!/bin/bash -v
         apt-get update && sudo apt-get -y upgrade
 
-        mkdir /block
         mkdir /transient
-
-        mount /dev/vdc /block
         mount /dev/vdb /transient
+
+        echo -e "o\nn\np\n1\n\n\nw" | fdisk /dev/vdc
+        mkfs.ext4 /dev/vdc1
+        mkdir /block
+        mount /dev/vdc1 /block
 
         apt-get -y install git
 
@@ -94,6 +115,7 @@ Resources:
         git clone https://github.com/MartinPaulo/SparkDiskTester.git
         cd SparkDiskTester
         ./start.sh
+
   VolumeAttachment:
     Type: OS::Cinder::VolumeAttachment
     Properties:
