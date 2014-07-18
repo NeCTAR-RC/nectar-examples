@@ -17,6 +17,19 @@ Parameters:
     AllowedValues: [m1.small, m1.medium, m1.large, m1.xlarge, m1.xxlarge]
     ConstraintDescription: must be a valid NeCTAR flavour.
 
+  ImageName:
+    Type: String
+    Description: Name of the image to use for the instance to be created
+    Default: 'NeCTAR Ubuntu 14.04 (Trusty) amd64'
+    AllowedValues: ['NeCTAR Ubuntu 13.10 (Saucy) amd64', 'NeCTAR Ubuntu 14.04 (Trusty) amd64']
+
+
+Mappings:
+
+  InstanceId:
+   'NeCTAR Ubuntu 13.10 (Saucy) amd64': {ImageId: a6dcb912-8307-4d35-861f-3e41ce994666}
+   'NeCTAR Ubuntu 14.04 (Trusty) amd64': {ImageId: 26955e70-9da0-44d4-b3f8-e5276e989fdb}
+
 
 Resources:
 
@@ -45,7 +58,11 @@ Resources:
   AlarmServer:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: a6dcb912-8307-4d35-861f-3e41ce994666
+      ImageId:
+        Fn::FindInMap:
+        - InstanceId
+        - {Ref: ImageName}
+        - ImageId
       InstanceType: {Ref: InstanceType}
       KeyName: {Ref: KeyName}
       # the following are project specific, and will have to be adjusted.
@@ -68,8 +85,8 @@ Resources:
         apt-get -q -y update
 
         # from http://askubuntu.com/questions/190582/installing-java-automatically-with-silent-option
-        echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
-        echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections
+        echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections
+        echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections
 
         apt-get install oracle-java8-installer -y
 
