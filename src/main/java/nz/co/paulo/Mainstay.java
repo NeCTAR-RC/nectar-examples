@@ -41,7 +41,7 @@ class Context {
 
     @SuppressWarnings("CloneDoesntCallSuperClone")
     @Override
-    public synchronized Context clone() throws CloneNotSupportedException {
+    public synchronized Context clone() {
         Context copy = new Context();
         copy.results.addAll(results);
         return copy;
