@@ -83,8 +83,8 @@ Resources:
         apt-get -q -y update
 
         # from http://askubuntu.com/questions/190582/installing-java-automatically-with-silent-option
-        echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
-        echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections
+        echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections
+        echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections
 
         apt-get install oracle-java8-installer -y
 

@@ -25,7 +25,7 @@ public class Mainstay {
                     c.results.add(new DiskTester.Row(element.toString()));
                 }
             }
-        }).run();
+        }).start();
         // we'll run on port 8080
         setPort(8080);
         // we'll serve a css file from here, as well as some javascript
