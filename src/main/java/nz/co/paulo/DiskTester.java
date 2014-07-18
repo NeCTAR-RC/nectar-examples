@@ -28,19 +28,17 @@ public class DiskTester {
     public static final String WRITE_RESULT = "It took %.3f seconds to write a %d MB, file rate: %.1f MB/s%n";
     public static final String READ_RESULT =  "It took %.3f seconds to read  a %d MB file, rate: %.1f MB/s%n";
 
-    public static List<Row> testStorage() throws IOException {
-        ArrayList<Row> result = new ArrayList<>();
+    public static void testStorage(ArrayList<Row> results) throws IOException {
         for (String directory : directories) {
             if (Files.exists(Paths.get(directory))) {
-                result.add(new Row("Now testing: " + directory));
+                results.add(new Row("Now testing: " + directory));
                 for (int mb : new int[]{50, 100, 250, 500, 1000, 2000}) {
-                    result.addAll(testFileSize(mb, directory));
+                    results.addAll(testFileSize(mb, directory));
                 }
             } else {
-                result.add(new Row("Skipped " + directory + " as it does not exist."));
+                results.add(new Row("Skipped " + directory + " as it does not exist."));
             }
         }
-        return result;
     }
 
     private static List<Row> testFileSize(int mb, String directory) throws IOException {

@@ -57,13 +57,10 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
       AvailabilityZone: { Ref: AvailabilityZone }
-      ImageId: a6dcb912-8307-4d35-861f-3e41ce994666
+      ImageId: 26955e70-9da0-44d4-b3f8-e5276e989fdb
       InstanceType: {Ref: InstanceType}
       KeyName: {Ref: KeyName}
-      # the following are project specific, and will have to be adjusted.
       SecurityGroups: [{Ref: AlertsSecurityGroup}]
-      # the following is written to /var/lib/cloud/data/cfn-userdata
-      # note the call to cfn-init which causes the AWS::CloudFomration::Init to be actioned
       UserData: |
         #!/bin/bash -v
         apt-get update && sudo apt-get -y upgrade
