@@ -11,6 +11,7 @@ import java.util.List;
 /**
  * // http://stackoverflow.com/questions/13155700/fastest-way-to-read-and-write-large-files-line-by-line-in-java
  * Created by paulo on 14/07/2014.
+ * https://www.flamingspork.com/talks/
  */
 public class DiskTester {
 
@@ -28,9 +29,11 @@ public class DiskTester {
 
         @SuppressWarnings("CloneDoesntCallSuperClone")
         @Override
-        public synchronized Context clone() {
+        public Context clone() {
             Context copy = new Context();
-            copy.results.addAll(results);
+            synchronized (results) {
+                copy.results.addAll(results);
+            }
             return copy;
         }
 
