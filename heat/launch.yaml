@@ -132,4 +132,4 @@ Outputs:
       - - http://
         - Fn::GetAtt: [DiskTesterMachine, PublicIp]
         - :8080/
-    Description: URL for stressed server
+    Description: URL for disktester server
