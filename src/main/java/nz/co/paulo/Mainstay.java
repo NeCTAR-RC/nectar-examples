@@ -56,7 +56,7 @@ public class Mainstay {
     }
 
     private static Response startStress(Request request, Response response) {
-        System.out.printf("Starting  %s is:\n", Arrays.toString(command));
+        System.out.printf("Starting  %s is:%n", Arrays.toString(command));
         synchronized (lock) {
             if (isNoProcess()) {
                 command[VALUE_CPU] = request.queryParams("cpu_count");

@@ -67,7 +67,7 @@ public class PresentationModel {
         fourIsDefault = false;
         eightIsDefault = false;
         switch (isDefault) {
-            case "1":
+            default: // 1 will be the default
                 oneIsDefault = true;
                 break;
             case "2":
