@@ -33,7 +33,7 @@ Mappings:
 
   InstanceId:
    'NeCTAR Ubuntu 13.10 (Saucy) amd64': {ImageId: a6dcb912-8307-4d35-861f-3e41ce994666}
-   'NeCTAR Ubuntu 14.04 (Trusty) amd64': {ImageId: 26955e70-9da0-44d4-b3f8-e5276e989fdb}
+   'NeCTAR Ubuntu 14.04 (Trusty) amd64': {ImageId: 563219b9-7d1d-44b4-a6b5-37f351799bc9}
 
 
 Resources:
