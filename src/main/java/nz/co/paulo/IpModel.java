@@ -12,6 +12,8 @@ public class IpModel {
 
     String ipAddress = getHostAddress();
 
+    // Martin: is this is a bad idea? As this is this machines IP address: Not the IP address of the server being
+    // monitored by ceilometer, hopefully.
     private String getHostAddress(){
         try {
             return InetAddress.getLocalHost().getHostAddress();
