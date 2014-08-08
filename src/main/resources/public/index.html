@@ -10,17 +10,30 @@
     <h1>Ceilometer alarm demo</h1>
 
     <p>
-        This application is a simple one that you can set up as a target for ceilometer alarms.
-        It simply keeps a count of every alarm called.
+        This application is a simple one that you can set up to be used as a target for ceilometer alarms.
+        It just increments a counter on every alarm call received.
     </p>
 
-    <p><a href="/history">See the alarm history</a></p>
+    <p>The Ceilometer command to set the server running this application up as a target would be something along the
+        lines of the following:</p>
+        <pre>
+            ceilometer -k alarm-threshold-create --name warn_on_high_cpu --description 'squeal if too many instances'
+            --meter-name cpu_util --threshold 30 --comparison-operator ge --statistic max --period 600
+            --evaluation-periods 1 --alarm-action 'http://130.56.250.199:8080/alarm/instances_TOO_HOT'
+            --insufficient-data-action 'http://130.56.250.199:8080/alarm/instances_NO_DATA'
+            --ok-action 'http://130.56.250.199:8080/alarm/instances_OK'
+            --query resource_id=40d1ea5a-562d-4bb9-822a-912f16a978c2
+        </pre>
+    <p>Where <code>130.56.250.199</code> is the I.P. number of the server hosting this application.</p>
 
-    <p><a href="/alarm">Trigger an alarm manually</a></p>
+    <p><a href="/history">See the alarm count history</a></p>
 
-    <p><a href="/clear">Remove all alarm records</a></p>
+    <p><a href="/alarm">Trigger an alarm count manually</a></p>
 
-    <p><a href="/reset">Reset all alarms to 0</a></p>
+    <p><a href="/clear" onclick="return confirm('Do you really want to remove the records?');">Remove all alarm count
+        records</a></p>
+
+    <p><a href="/reset" onclick="return confirm('Do you really want to reset the counts?');">Reset all alarms counts to 0</a></p>
 </div>
 </body>
 </html>
