@@ -1,7 +1,7 @@
 table, td, th {
     border: 1px solid green;
-    margin-left:auto;
-    margin-right:auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 th {
@@ -65,4 +65,14 @@ input[type=submit] {
     cursor: pointer;
     border-radius: 5px;
     font-size: 100%;
+}
+
+pre {
+    color: #000000;
+    font-family: "Courier New", Courier, monospace;
+    background-color: lightgray;
+    border: 3px darkgray;
+    text-align: left;
+    margin: 20px 50px;
+    padding-top: 10px;
 }
