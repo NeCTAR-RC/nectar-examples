@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>Ceilometer alarm counter</title>
-    <link rel="stylesheet" type="text/css" href="mainstay.css">
-</head>
-<body>
-<h1>Ceilometer alarm counter</h1>
+{{> pageHeader}}
 <div class="border">
 
     <p>
@@ -19,12 +11,13 @@
         <pre>
     ceilometer alarm-threshold-create --name warn_on_high_cpu --description 'squeal if too many instances'
     --meter-name cpu_util --threshold 30 --comparison-operator ge --statistic max --period 600
-    --evaluation-periods 1 --alarm-action 'http://130.56.250.199:8080/alarm/instances_TOO_HOT'
-    --insufficient-data-action 'http://130.56.250.199:8080/alarm/instances_NO_DATA'
-    --ok-action 'http://130.56.250.199:8080/alarm/instances_OK'
+    --evaluation-periods 1 --alarm-action 'http://{{ipAddress}}:8080/alarm/instances_TOO_HOT'
+    --insufficient-data-action 'http://{{ipAddress}}:8080/alarm/instances_NO_DATA'
+    --ok-action 'http://{{ipAddress}}:8080/alarm/instances_OK'
     --query resource_id=40d1ea5a-562d-4bb9-822a-912f16a978c2
         </pre>
-    <p>Where <code>130.56.250.199</code> is the I.P. number of the server hosting this application.</p>
+    <p>Where <code>{{ipAddress}}</code> is the I.P. number of the server hosting this application and
+        <code>40d1ea5a-562d-4bb9-822a-912f16a978c2</code> is the ID of the resource that you want to monitor.</p>
 </div>
     <p><a href="/history">See the alarm count history</a></p>
 
