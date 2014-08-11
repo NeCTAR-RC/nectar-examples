@@ -19,7 +19,6 @@ import static spark.Spark.*;
 public class Mainstay {
 
     private static final Map<String, Integer> totals = new ConcurrentSkipListMap();
-    private static IpModel ipModel;
 
     public static void main(String[] args) {
         // we'll run on port 8080
@@ -40,11 +39,11 @@ public class Mainstay {
             return rs;
         });
         get("/reset", Mainstay::resetTotals);
-        get("/", (rq, rs) -> getIpModel().getTotals(), new MustacheTemplateEngine());
+        get("/", (rq, rs) -> IpModel.getInstance().getTotals(), new MustacheTemplateEngine());
     }
 
     private static Response resetTotals(Request request, Response response) {
-        totals.keySet().forEach((key)->totals.put(key, 0));
+        totals.keySet().forEach((key) -> totals.put(key, 0));
         response.redirect("/history");
         return response;
     }
@@ -66,12 +65,5 @@ public class Mainstay {
             source = "unknown alarm?";
         }
         totals.put(source, totals.getOrDefault(source, 0) + 1);
-    }
-
-    public static IpModel getIpModel() {
-        if (ipModel == null) {
-            ipModel = new IpModel();
-        }
-        return ipModel;
     }
 }

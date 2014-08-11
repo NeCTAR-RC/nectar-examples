@@ -8,11 +8,17 @@ import java.net.UnknownHostException;
 /**
  * Created by martin paulo on 8/08/2014.
  */
-public class IpModel {
+class IpModel {
 
     String ipAddress = getHostAddress();
 
-    private String getHostAddress(){
+    private static IpModel instance;
+
+    private IpModel() {
+        // a singleton.
+    }
+
+    private String getHostAddress() {
         try {
             return InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
@@ -23,6 +29,18 @@ public class IpModel {
     }
 
     public ModelAndView getTotals() {
-            return new ModelAndView(this, "index.mustache");
+        return new ModelAndView(this, "index.mustache");
     }
+
+    public synchronized static IpModel getInstance() {
+        if (instance == null) {
+            instance = new IpModel();
+        }
+        return instance;
+    }
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
 }
