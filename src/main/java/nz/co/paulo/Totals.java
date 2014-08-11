@@ -12,7 +12,7 @@ import java.util.Map;
  * (http://martinfowler.com/eaaDev/PresentationModel.html). It's simply used to transfer values into the
  * Mustache template.
  */
-public class History {
+public class Totals {
 
     private int rowCount;
     List<Row> rows;
@@ -28,14 +28,15 @@ public class History {
         }
     }
 
-    public ModelAndView getHistory(Map<String, Integer> alarmTotals) {
+    public ModelAndView getTotals(Map<String, Integer> alarmTotals) {
         rowCount = 0;
         rows = new ArrayList();
         alarmTotals.forEach( (key, value)-> rows.add(new Row(key, value.toString(),getCssClass(rowCount++))));
-        return new ModelAndView(this, "history.mustache");
+        return new ModelAndView(this, "totals.mustache");
     }
 
     private String getCssClass(int rowCount) {
         return ((rowCount % 2 != 0) ? "even" : "odd");
     }
+
 }

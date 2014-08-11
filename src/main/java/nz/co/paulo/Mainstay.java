@@ -19,6 +19,8 @@ import static spark.Spark.*;
 public class Mainstay {
 
     private static final Map<String, Integer> totals = new ConcurrentSkipListMap();
+    public static final String URL_TOTALS = "/totals";
+    public static final String URL_ALARM = "/alarm";
 
     public static void main(String[] args) {
         // we'll run on port 8080
@@ -26,16 +28,16 @@ public class Mainstay {
         // we'll serve a css file from here, as well as the home page
         staticFileLocation("/public");
         // we will allow users to register an alarm via a form
-        get("/alarm", (rq, rs) -> new ModelAndView(new HashMap(), "form.mustache"), new MustacheTemplateEngine());
+        get(URL_ALARM, (rq, rs) -> new ModelAndView(new HashMap(), "form.mustache"), new MustacheTemplateEngine());
         // hence we want to handle the form post...
-        post("/alarm", Mainstay::alarmFromForm);
+        post(URL_ALARM, Mainstay::alarmFromForm);
         // and the actual alarms themselves...
-        post("alarm/:name", Mainstay::alarmRegistered);
+        post(URL_ALARM + "/:name", Mainstay::alarmRegistered);
         // and we can view the history of our alarms
-        get("/history", (rq, rs) -> new History().getHistory(totals), new MustacheTemplateEngine());
+        get(URL_TOTALS, (rq, rs) -> new Totals().getTotals(totals), new MustacheTemplateEngine());
         get("/clear", (rq, rs) -> {
             totals.clear();
-            rs.redirect("/history");
+            rs.redirect(URL_TOTALS);
             return rs;
         });
         get("/reset", Mainstay::resetTotals);
@@ -44,7 +46,7 @@ public class Mainstay {
 
     private static Response resetTotals(Request request, Response response) {
         totals.keySet().forEach((key) -> totals.put(key, 0));
-        response.redirect("/history");
+        response.redirect(URL_TOTALS);
         return response;
     }
 
@@ -56,7 +58,7 @@ public class Mainstay {
 
     private static Response alarmFromForm(Request request, Response response) {
         countAlarm(request.queryParams("alarm_name"));
-        response.redirect("/history");
+        response.redirect(URL_TOTALS);
         return response;
     }
 
