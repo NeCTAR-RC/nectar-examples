@@ -17,6 +17,7 @@ public class IpModel {
             return InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
             // we'll just go with the default IP of localhost...
+            e.printStackTrace();
         }
         return "127.0.0.1";
     }
