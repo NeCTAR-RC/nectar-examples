@@ -22,7 +22,7 @@ import static spark.Spark.*;
 public class Mainstay {
 
     private static final Map<String, Integer> totals = new ConcurrentSkipListMap();
-    private static final Map<String, ArrayList<AlarmDetails>> history = new ConcurrentSkipListMap<>();
+    private static final Map<String, History> history = new ConcurrentSkipListMap<>();
     public static final String URL_TOTALS = "/totals";
     public static final String URL_ALARM = "/alarm";
     private static final String URL_VIEW = "/view";
@@ -51,12 +51,13 @@ public class Mainstay {
     }
 
     private static ModelAndView alarmView(Request request, Response response) {
-        System.out.println("Name: " + request.params(":name"));
-        return new ModelAndView(new HashMap(), "view.mustache");
+        String alarm_name = request.params(":name");
+        return new ModelAndView(history.get(alarm_name), "view.mustache");
     }
 
     private static Response resetTotals(Request request, Response response) {
         totals.keySet().forEach((key) -> totals.put(key, 0));
+        history.values().forEach((entry) -> entry.getHistory().clear());
         response.redirect(URL_TOTALS);
         return response;
     }
@@ -79,11 +80,11 @@ public class Mainstay {
         }
         totals.put(source, totals.getOrDefault(source, 0) + 1);
         AlarmDetails alarmDetails = new AlarmDetails(request);
-        ArrayList<AlarmDetails> priorAlarms = history.get(source);
+        History priorAlarms = history.get(source);
         if (priorAlarms == null) {
-            priorAlarms = new ArrayList<>();
+            priorAlarms = new History(source);
             history.put(source, priorAlarms);
         }
-        priorAlarms.add(alarmDetails);
+        priorAlarms.getHistory().add(alarmDetails);
     }
 }

@@ -1,16 +1,29 @@
 {{> pageHeader}}
 <div class="border">
-    <h2>Recorded so far</h2>
+    <h2>Alarm: {{alarmName}}</h2>
 
     <div class="table">
         <table>
             <tr>
-                <th> Alarm Name </th>
-                <th> Times Called </th>
+                <th> Id </th>
+                <th> Previous </th>
+                <th> Current </th>
+                <th> Reason </th>
+                <th> Reason data </th>
+                <th> Time reported </th>
             </tr>
-
+            {{#history}}
+                <tr>
+                    <td>{{alarmId}}</td>
+                    <td>{{previous}}</td>
+                    <td>{{current}}</td>
+                    <td>{{reason}}</td>
+                    <td>{{reasonData}}</td>
+                    <td>{{timeReported}}</td>
+                </tr>
+            {{/history}}
         </table>
     </div>
 </div>
-<p>Back to <a href="/totals">totals</a></p>
+<p>back to <a href="/totals">totals</a></p>
 {{> pageFooter}}

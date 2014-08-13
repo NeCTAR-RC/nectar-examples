@@ -18,7 +18,7 @@ public class AlarmDetails {
     String previous;
     String current;
     String reason;
-    String reason_data;
+    String reasonData;
     String timeReported;
 
     public AlarmDetails(Request request) {
@@ -28,7 +28,7 @@ public class AlarmDetails {
         previous = getNonNullValue(request.queryParams("previous"));
         current = getNonNullValue(request.queryParams("current"));
         reason = getNonNullValue(request.queryParams("reason"));
-        reason_data = getNonNullValue(request.queryParams("reason_data"));
+        reasonData = getNonNullValue(request.queryParams("reason_data"));
     }
 
     private String getNonNullValue(String value) {
@@ -51,8 +51,8 @@ public class AlarmDetails {
         return reason;
     }
 
-    public String getReason_data() {
-        return reason_data;
+    public String getReasonData() {
+        return reasonData;
     }
 
     public String getTimeReported() {

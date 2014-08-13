@@ -76,3 +76,49 @@ pre {
     margin: 20px 50px;
     padding-top: 10px;
 }
+
+form.alarm_form {
+    margin-left: auto;
+    margin-right: auto;
+    width: 650px;
+}
+
+.alarm_form ul {
+    width: 550px;
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+.alarm_form li {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    position: relative;
+}
+
+.alarm_form li:first-child, .alarm_form li:last-child {
+    border-bottom: 1px solid #777;
+}
+
+.alarm_form label {
+    width: 150px;
+    margin-top: 3px;
+    display: inline-block;
+    float: left;
+    padding: 3px;
+    text-align: left;
+}
+
+.alarm_form input {
+    width: 220px;
+    padding: 5px 8px;
+}
+
+.alarm_form textarea {
+    padding: 8px;
+    width: 300px;
+}
+
+.alarm_form button {
+    margin-left: 156px;
+}
