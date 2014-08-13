@@ -25,6 +25,7 @@ public class Mainstay {
     private static final Map<String, ArrayList<AlarmDetails>> history = new ConcurrentSkipListMap<>();
     public static final String URL_TOTALS = "/totals";
     public static final String URL_ALARM = "/alarm";
+    private static final String URL_VIEW = "/view";
 
     public static void main(String[] args) {
         // we'll run on port 8080
@@ -37,6 +38,7 @@ public class Mainstay {
         post(URL_ALARM, Mainstay::alarmFromForm);
         // and the actual alarms themselves...
         post(URL_ALARM + "/:name", Mainstay::alarmRegistered);
+        get(URL_VIEW + "/:name", (rq, rs)-> alarmView(rq, rs), new MustacheTemplateEngine());
         // and we can view the history of our alarms
         get(URL_TOTALS, (rq, rs) -> new Totals().getTotals(totals), new MustacheTemplateEngine());
         get("/clear", (rq, rs) -> {
@@ -46,6 +48,11 @@ public class Mainstay {
         });
         get("/reset", Mainstay::resetTotals);
         get("/", (rq, rs) -> IpModel.getInstance().getTotals(), new MustacheTemplateEngine());
+    }
+
+    private static ModelAndView alarmView(Request request, Response response) {
+        System.out.println("Name: " + request.params(":name"));
+        return new ModelAndView(new HashMap(), "view.mustache");
     }
 
     private static Response resetTotals(Request request, Response response) {

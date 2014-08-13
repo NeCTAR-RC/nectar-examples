@@ -8,14 +8,9 @@
                 <th> Alarm Name </th>
                 <th> Times Called </th>
             </tr>
-            {{#rows}}
-                <tr class="{{cssClass}}">
-                    <td><a href=/view/{{alert}}>{{alert}}</a></td>
-                    <td>{{value}}</td>
-                </tr>
-            {{/rows}}
+
         </table>
     </div>
 </div>
-<p>To trigger an alarm: <a href="/alarm">manually</a></p>
+<p>Back to <a href="/totals">totals</a></p>
 {{> pageFooter}}
