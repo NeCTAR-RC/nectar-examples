@@ -17,11 +17,16 @@
     </p>
 
     <form action="alarm" method="post" autocomplete="on">
+        <input type="text" name="alarm_id" value="manual" hidden />
+        <input type="text" name="previous" value="unknown" hidden />
+        <input type="text" name="current" value="alarm" hidden />
+        <input type="text" name="reason" value="operator intervention" hidden />
+        <input type="text" name="reason_data" value="just because" hidden />
         <label>
             Alarm name:
             <input type="text" name="alarm_name">
         </label> <input type="submit" value="Submit">
     </form>
 </div>
-<p>To see the history: <a href="/history">to date</a></p>
+<p>To see the totals: <a href="/totals">to date</a></p>
 {{> pageFooter}}

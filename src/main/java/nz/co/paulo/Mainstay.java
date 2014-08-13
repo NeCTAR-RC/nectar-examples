@@ -6,8 +6,11 @@ import spark.Response;
 import spark.template.mustache.MustacheTemplateEngine;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 import static spark.Spark.*;
@@ -19,6 +22,7 @@ import static spark.Spark.*;
 public class Mainstay {
 
     private static final Map<String, Integer> totals = new ConcurrentSkipListMap();
+    private static final Map<String, ArrayList<AlarmDetails>> history = new ConcurrentSkipListMap<>();
     public static final String URL_TOTALS = "/totals";
     public static final String URL_ALARM = "/alarm";
 
@@ -51,21 +55,28 @@ public class Mainstay {
     }
 
     private static Response alarmRegistered(Request request, Response response) {
-        countAlarm(request.params(":name"));
+        countAlarm(request.params(":name"), request);
         response.status(HttpServletResponse.SC_OK);
         return response;
     }
 
     private static Response alarmFromForm(Request request, Response response) {
-        countAlarm(request.queryParams("alarm_name"));
+        countAlarm(request.queryParams("alarm_name"), request);
         response.redirect(URL_TOTALS);
         return response;
     }
 
-    private static void countAlarm(String source) {
+    private static void countAlarm(String source, Request request) {
         if (source == null || source.length() <= 0) {
             source = "unknown alarm?";
         }
         totals.put(source, totals.getOrDefault(source, 0) + 1);
+        AlarmDetails alarmDetails = new AlarmDetails(request);
+        ArrayList<AlarmDetails> priorAlarms = history.get(source);
+        if (priorAlarms == null) {
+            priorAlarms = new ArrayList<>();
+            history.put(source, priorAlarms);
+        }
+        priorAlarms.add(alarmDetails);
     }
 }
