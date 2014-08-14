@@ -47,7 +47,7 @@ public class Mainstay {
 
     private static ModelAndView alarmView(Request request, Response response) {
         String alarmName = request.params(":name");
-        System.out.println("Alarm: " + alarmName);
+        System.out.println(":name " + alarmName);
         return new ModelAndView(history.get(alarmName), "view.mustache");
     }
 
@@ -77,17 +77,18 @@ public class Mainstay {
         return response;
     }
 
-    private static void registerAlarm(String source, Request request) {
+    private static void registerAlarm(final String source, Request request) {
         if (source == null || source.length() <= 0) {
-            source = "unknown alarm?";
+            return;
         }
         totals.put(source, totals.getOrDefault(source, 0) + 1);
-        AlarmDetails alarmDetails = new AlarmDetails(request);
         History priorAlarms = history.get(source);
         if (priorAlarms == null) {
+            System.out.println(":source " + source);
             priorAlarms = new History(source);
             history.put(source, priorAlarms);
         }
+        AlarmDetails alarmDetails = new AlarmDetails(request);
         priorAlarms.getHistory().add(alarmDetails);
     }
 }
