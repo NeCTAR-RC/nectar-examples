@@ -6,6 +6,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Martin Paulo on 11/08/2014.
@@ -30,6 +32,14 @@ public class AlarmDetails {
         current = getNonNullValue(request.queryParams("current"));
         reason = getNonNullValue(request.queryParams("reason"));
         reasonData = getNonNullValue(request.queryParams("reason_data"));
+        Set<String> strings = request.queryParams();
+        for (String param: strings) {
+            System.out.println("GOT: " + param);
+        }
+        Map<String, String> params = request.params();
+        for (String param: params.keySet()) {
+            System.out.println("Param: " + param);
+        }
     }
 
     private String getNonNullValue(String value) {
