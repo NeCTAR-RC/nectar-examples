@@ -1,13 +1,11 @@
 package nz.co.paulo;
 
+import com.google.gson.Gson;
 import spark.Request;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by Martin Paulo on 11/08/2014.
@@ -17,30 +15,32 @@ public class AlarmDetails {
 
     private final DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
-    final String alarmId;
-    final String previous;
-    final String current;
-    final String reason;
-    final String reasonData;
-    final String timeReported;
+    // names must match the json names...
+    String alarm_id;
+    String previous;
+    String current;
+    String reason;
+    String reason_data;
+    String timeReported;
 
     public AlarmDetails(Request request) {
-        Date today = Calendar.getInstance().getTime();
-        timeReported = df.format(today);
-        alarmId = getNonNullValue(request.queryParams("alarm_id"));
-        previous = getNonNullValue(request.queryParams("previous"));
-        current = getNonNullValue(request.queryParams("current"));
-        reason = getNonNullValue(request.queryParams("reason"));
-        reasonData = getNonNullValue(request.queryParams("reason_data"));
-        Set<String> strings = request.queryParams();
-        for (String param: strings) {
-            System.out.println("GOT: " + param);
+        timeReported = df.format(Calendar.getInstance().getTime());
+        if (request.queryParams().size() > 0) {
+            // came in from the form
+            alarm_id = getNonNullValue(request.queryParams("alarm_id"));
+            previous = getNonNullValue(request.queryParams("previous"));
+            current = getNonNullValue(request.queryParams("current"));
+            reason = getNonNullValue(request.queryParams("reason"));
+            reason_data = getNonNullValue(request.queryParams("reason_data"));
+        } else {
+            Gson gson = new Gson();
+            AlarmDetails alarmDetails = gson.fromJson(request.body(), AlarmDetails.class);
+            alarm_id = alarmDetails.alarm_id;
+            previous = alarmDetails.previous;
+            current = alarmDetails.current;
+            reason = alarmDetails.reason;
+            reason_data = alarmDetails.reason_data;
         }
-        Map<String, String> params = request.params();
-        for (String param: params.keySet()) {
-            System.out.println("Param: " + param);
-        }
-        System.out.println(request.body());
     }
 
     private String getNonNullValue(String value) {
@@ -48,7 +48,7 @@ public class AlarmDetails {
     }
 
     public String getAlarmId() {
-        return alarmId;
+        return alarm_id;
     }
 
     public String getPrevious() {
@@ -63,8 +63,8 @@ public class AlarmDetails {
         return reason;
     }
 
-    public String getReasonData() {
-        return reasonData;
+    public String getReason_data() {
+        return reason_data;
     }
 
     public String getTimeReported() {
@@ -73,6 +73,6 @@ public class AlarmDetails {
 
     @Override
     public String toString() {
-        return "Id: " + alarmId + " Time: " + getTimeReported();
+        return "Id: " + alarm_id + " Time: " + getTimeReported();
     }
 }

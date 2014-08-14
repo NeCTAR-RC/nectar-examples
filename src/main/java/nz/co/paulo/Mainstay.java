@@ -47,8 +47,9 @@ public class Mainstay {
     }
 
     private static ModelAndView alarmView(Request request, Response response) {
-        String alarm_name = request.params(":name");
-        return new ModelAndView(history.get(alarm_name), "view.mustache");
+        String alarmName = request.params(":name");
+        System.out.println("Alarm: " + alarmName);
+        return new ModelAndView(history.get(alarmName), "view.mustache");
     }
 
     private static Response clearAll(Request request, Response response) {
