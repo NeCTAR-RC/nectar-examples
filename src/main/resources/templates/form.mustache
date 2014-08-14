@@ -6,11 +6,15 @@
         To register an alarm call via curl, simply do:
     </p>
     <code>
-        curl -X POST http://localhost:8080/alarm/some_alarm
+        curl -X POST http://{{ipAddress}}:8080/alarm/some_alarm_name
     </code>
 
+    <p>(See <a
+            href="http://superuser.com/questions/361504/how-to-send-post-with-body-data-headers-and-http-params-over-the-curl-command#answer-361508">this
+        link</a> for ways to provide the post "body"). </p>
+
     <p>
-        Where <code>localhost</code> is the host running the application and <code>some_alarm</code> is the
+        Where <code>{{ipAddress}}</code> is the host running this application and <code>some_alarm_name</code> is the
         name of the alarm to be registered. </p>
 
     <p>Otherwise, simply fill in the name of the alarm below and submit the form.
