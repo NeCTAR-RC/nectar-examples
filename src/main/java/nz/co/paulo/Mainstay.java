@@ -6,7 +6,6 @@ import spark.Response;
 import spark.template.mustache.MustacheTemplateEngine;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
 
@@ -30,7 +29,7 @@ public class Mainstay {
         // we'll serve a css file from here
         staticFileLocation("/public");
         // we will allow users to register an alarm via a form
-        get(URL_ALARM, (rq, rs) -> new ModelAndView(new HashMap(), "form.mustache"), new MustacheTemplateEngine());
+        get(URL_ALARM, (rq, rs) -> IpModel.getInstance().getView("form.mustache"), new MustacheTemplateEngine());
         // hence we want to handle the form post...
         post(URL_ALARM, Mainstay::alarmFromForm);
         // and the actual alarms posts from ceilometer...
@@ -43,7 +42,7 @@ public class Mainstay {
         get("/clear", Mainstay::clearAll);
         // and remove the entire set of totals and history.
         get("/reset", Mainstay::resetTotals);
-        get("/", (rq, rs) -> IpModel.getInstance().getTotals(), new MustacheTemplateEngine());
+        get("/", (rq, rs) -> IpModel.getInstance().getView("index.mustache"), new MustacheTemplateEngine());
     }
 
     private static ModelAndView alarmView(Request request, Response response) {

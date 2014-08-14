@@ -33,8 +33,8 @@ class IpModel {
         return "127.0.0.1";
     }
 
-    public ModelAndView getTotals() {
-        return new ModelAndView(this, "index.mustache");
+    public ModelAndView getView(String viewName) {
+        return new ModelAndView(this, viewName);
     }
 
     public synchronized static IpModel getInstance() {
