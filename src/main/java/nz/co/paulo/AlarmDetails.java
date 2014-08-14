@@ -33,6 +33,7 @@ public class AlarmDetails {
             reason = getNonNullValue(request.queryParams("reason"));
             reason_data = getNonNullValue(request.queryParams("reason_data"));
         } else {
+            System.out.println(request.body());
             Gson gson = new Gson();
             AlarmDetails alarmDetails = gson.fromJson(request.body(), AlarmDetails.class);
             alarm_id = alarmDetails.alarm_id;
