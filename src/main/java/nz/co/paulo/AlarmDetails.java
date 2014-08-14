@@ -40,6 +40,7 @@ public class AlarmDetails {
         for (String param: params.keySet()) {
             System.out.println("Param: " + param);
         }
+        System.out.println(request.body());
     }
 
     private String getNonNullValue(String value) {
