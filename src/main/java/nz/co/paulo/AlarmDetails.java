@@ -13,35 +13,67 @@ import java.util.Calendar;
  */
 public class AlarmDetails {
 
-    private final DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    // So the json is something along the lines of:
+    // {
+    //      "current": "ok",
+    //      "alarm_id": "4a4579b6-3c24-42f8-b0bc-45b12148b176",
+    //      "reason": "Transition to ok due to 1 samples inside threshold, most recent: 15.5083333333",
+    //      "reason_data": {
+    //          "count": 1,
+    //          "most_recent": 15.508333333333333,
+    //          "type": "threshold",
+    //          "disposition": "inside"
+    //          },
+    //      "previous": "alarm"
+    // }
+
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+    static class ReasonData {
+        int count;
+        float most_recent;
+        String type;
+        String disposition;
+
+        @Override
+        public String toString() {
+            return "Count: " + count + "<br /> Type: " + type + "<br />  Disposition: " +
+                    disposition + "<br />  Most Recent: " + most_recent;
+        }
+    }
+
 
     // names must match the json names...
     String alarm_id;
     String previous;
     String current;
     String reason;
-    transient String reason_data;
+    ReasonData reason_data;
     transient String timeReported;
 
     public AlarmDetails(Request request) {
-        timeReported = df.format(Calendar.getInstance().getTime());
+        timeReported = DATE_FORMAT.format(Calendar.getInstance().getTime());
         if (request.queryParams().size() > 0) {
-            // came in from the form
-            alarm_id = getNonNullValue(request.queryParams("alarm_id"));
-            previous = getNonNullValue(request.queryParams("previous"));
-            current = getNonNullValue(request.queryParams("current"));
-            reason = getNonNullValue(request.queryParams("reason"));
-            reason_data = getNonNullValue(request.queryParams("reason_data"));
+            readFromForm(request);
         } else {
-            System.out.println(request.body());
-            Gson gson = new Gson();
-            AlarmDetails alarmDetails = gson.fromJson(request.body(), AlarmDetails.class);
-            alarm_id = alarmDetails.alarm_id;
-            previous = alarmDetails.previous;
-            current = alarmDetails.current;
-            reason = alarmDetails.reason;
-            reason_data = alarmDetails.reason_data;
+            readFromBody(request);
         }
+    }
+
+    private void readFromBody(Request request) {
+        AlarmDetails alarmDetails = new Gson().fromJson(request.body(), AlarmDetails.class);
+        alarm_id = alarmDetails.alarm_id;
+        previous = alarmDetails.previous;
+        current = alarmDetails.current;
+        reason = alarmDetails.reason;
+        reason_data = alarmDetails.reason_data;
+    }
+
+    private void readFromForm(Request request) {
+        alarm_id = getNonNullValue(request.queryParams("alarm_id"));
+        previous = getNonNullValue(request.queryParams("previous"));
+        current = getNonNullValue(request.queryParams("current"));
+        reason = getNonNullValue(request.queryParams("reason"));
     }
 
     private String getNonNullValue(String value) {
@@ -65,7 +97,10 @@ public class AlarmDetails {
     }
 
     public String getReason_data() {
-        return reason_data;
+        if (reason_data == null) {
+            return "-";
+        }
+        return reason_data.toString();
     }
 
     public String getTimeReported() {
