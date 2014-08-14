@@ -6,11 +6,8 @@ import spark.Response;
 import spark.template.mustache.MustacheTemplateEngine;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 import static spark.Spark.*;
@@ -21,7 +18,7 @@ import static spark.Spark.*;
  */
 public class Mainstay {
 
-    private static final Map<String, Integer> totals = new ConcurrentSkipListMap();
+    private static final Map<String, Integer> totals = new ConcurrentSkipListMap<>();
     private static final Map<String, History> history = new ConcurrentSkipListMap<>();
     public static final String URL_TOTALS = "/totals";
     public static final String URL_ALARM = "/alarm";
@@ -30,22 +27,21 @@ public class Mainstay {
     public static void main(String[] args) {
         // we'll run on port 8080
         setPort(8080);
-        // we'll serve a css file from here, as well as the home page
+        // we'll serve a css file from here
         staticFileLocation("/public");
         // we will allow users to register an alarm via a form
         get(URL_ALARM, (rq, rs) -> new ModelAndView(new HashMap(), "form.mustache"), new MustacheTemplateEngine());
         // hence we want to handle the form post...
         post(URL_ALARM, Mainstay::alarmFromForm);
-        // and the actual alarms themselves...
+        // and the actual alarms posts from ceilometer...
         post(URL_ALARM + "/:name", Mainstay::alarmRegistered);
-        get(URL_VIEW + "/:name", (rq, rs)-> alarmView(rq, rs), new MustacheTemplateEngine());
-        // and we can view the history of our alarms
+        // which we can view
+        get(URL_VIEW + "/:name", Mainstay::alarmView, new MustacheTemplateEngine());
+        // and we can view the totals of the alarm call as well
         get(URL_TOTALS, (rq, rs) -> new Totals().getTotals(totals), new MustacheTemplateEngine());
-        get("/clear", (rq, rs) -> {
-            totals.clear();
-            rs.redirect(URL_TOTALS);
-            return rs;
-        });
+        // of course we might want reset the totals and the history
+        get("/clear", Mainstay::clearAll);
+        // and remove the entire set of totals and history.
         get("/reset", Mainstay::resetTotals);
         get("/", (rq, rs) -> IpModel.getInstance().getTotals(), new MustacheTemplateEngine());
     }
@@ -53,6 +49,13 @@ public class Mainstay {
     private static ModelAndView alarmView(Request request, Response response) {
         String alarm_name = request.params(":name");
         return new ModelAndView(history.get(alarm_name), "view.mustache");
+    }
+
+    private static Response clearAll(Request request, Response response) {
+        totals.clear();
+        history.clear();
+        response.redirect(URL_TOTALS);
+        return response;
     }
 
     private static Response resetTotals(Request request, Response response) {

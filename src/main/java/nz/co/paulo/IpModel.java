@@ -7,10 +7,11 @@ import java.net.UnknownHostException;
 
 /**
  * Created by martin paulo on 8/08/2014.
+ * A pretty basic attempt to find the IP address of the machine we are running on.
  */
 class IpModel {
 
-    String ipAddress = getHostAddress();
+    final String ipAddress = getHostAddress();
 
     private static IpModel instance;
 

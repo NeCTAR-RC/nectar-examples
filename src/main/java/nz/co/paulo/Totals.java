@@ -8,9 +8,8 @@ import java.util.Map;
 
 /**
  * Created by Martin Paulo on 1/07/2014.
- * I guess this is an implementation of the Presentation Model pattern
- * (http://martinfowler.com/eaaDev/PresentationModel.html). It's simply used to transfer values into the
- * Mustache template.
+ * An implementation of the Presentation Model pattern (http://martinfowler.com/eaaDev/PresentationModel.html).
+ * It's largely used to transfer values into the Mustache template.
  */
 public class Totals {
 
@@ -21,6 +20,7 @@ public class Totals {
         final String alert;
         final String value;
         final String cssClass;
+
         Row(String alert, String value, String cssClass) {
             this.alert = alert;
             this.value = value;
@@ -30,8 +30,8 @@ public class Totals {
 
     public ModelAndView getTotals(Map<String, Integer> alarmTotals) {
         rowCount = 0;
-        rows = new ArrayList();
-        alarmTotals.forEach( (key, value)-> rows.add(new Row(key, value.toString(),getCssClass(rowCount++))));
+        rows = new ArrayList<>();
+        alarmTotals.forEach((key, value) -> rows.add(new Row(key, value.toString(), getCssClass(rowCount++))));
         return new ModelAndView(this, "totals.mustache");
     }
 

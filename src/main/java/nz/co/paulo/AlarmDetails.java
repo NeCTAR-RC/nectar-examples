@@ -8,18 +8,19 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Created by martin paulo on 11/08/2014.
+ * Created by Martin Paulo on 11/08/2014.
+ * A holder for the details passed in a Ceilometer alarm call
  */
 public class AlarmDetails {
 
-    private DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    private final DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
-    String alarmId;
-    String previous;
-    String current;
-    String reason;
-    String reasonData;
-    String timeReported;
+    final String alarmId;
+    final String previous;
+    final String current;
+    final String reason;
+    final String reasonData;
+    final String timeReported;
 
     public AlarmDetails(Request request) {
         Date today = Calendar.getInstance().getTime();

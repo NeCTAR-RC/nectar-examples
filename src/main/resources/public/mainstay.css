@@ -86,8 +86,8 @@ form.alarm_form {
 .alarm_form ul {
     width: 550px;
     list-style: none;
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 }
 
 .alarm_form li {

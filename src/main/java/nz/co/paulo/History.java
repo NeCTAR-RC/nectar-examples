@@ -3,12 +3,15 @@ package nz.co.paulo;
 import java.util.ArrayList;
 
 /**
- * Created by martin paulo on 13/08/2014.
+ * Created by Martin Paulo
+ * An implementation of the Presentation Model pattern (http://martinfowler.com/eaaDev/PresentationModel.html).
+ * It's largely used to transfer values into the Mustache template.
  */
 public class History {
 
     String alarmName = "";
-    ArrayList<AlarmDetails> history = new ArrayList();
+
+    final ArrayList<AlarmDetails> history = new ArrayList<>();
 
     public History(String alarmName) {
         this.alarmName = alarmName;
@@ -18,7 +21,12 @@ public class History {
         return history;
     }
 
+    public String getAlarmName() {
+        return alarmName;
+    }
 
-
-
+    @Override
+    public String toString() {
+        return "Name: " + alarmName + " records: " + history.size();
+    }
 }
