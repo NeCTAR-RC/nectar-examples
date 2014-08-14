@@ -20,8 +20,8 @@ public class AlarmDetails {
     String previous;
     String current;
     String reason;
-    String reason_data;
-    String timeReported;
+    transient String reason_data;
+    transient String timeReported;
 
     public AlarmDetails(Request request) {
         timeReported = df.format(Calendar.getInstance().getTime());

@@ -34,7 +34,7 @@ public class Mainstay {
         // hence we want to handle the form post...
         post(URL_ALARM, Mainstay::alarmFromForm);
         // and the actual alarms posts from ceilometer...
-        post(URL_ALARM + "/:name", Mainstay::alarmRegistered);
+        post(URL_ALARM + "/:name", Mainstay::alarmFromCeilometer);
         // which we can view
         get(URL_VIEW + "/:name", Mainstay::alarmView, new MustacheTemplateEngine());
         // and we can view the totals of the alarm call as well
@@ -66,19 +66,19 @@ public class Mainstay {
         return response;
     }
 
-    private static Response alarmRegistered(Request request, Response response) {
-        countAlarm(request.params(":name"), request);
+    private static Response alarmFromCeilometer(Request request, Response response) {
+        registerAlarm(request.params(":name"), request);
         response.status(HttpServletResponse.SC_OK);
         return response;
     }
 
     private static Response alarmFromForm(Request request, Response response) {
-        countAlarm(request.queryParams("alarm_name"), request);
+        registerAlarm(request.queryParams("alarm_name"), request);
         response.redirect(URL_TOTALS);
         return response;
     }
 
-    private static void countAlarm(String source, Request request) {
+    private static void registerAlarm(String source, Request request) {
         if (source == null || source.length() <= 0) {
             source = "unknown alarm?";
         }
