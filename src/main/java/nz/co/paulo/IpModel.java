@@ -2,6 +2,7 @@ package nz.co.paulo;
 
 import spark.ModelAndView;
 
+import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.UnknownHostException;
@@ -80,6 +81,10 @@ class IpModel {
                 // Iterate all IP addresses assigned to each card...
                 for (Enumeration inetAddrs = iface.getInetAddresses(); inetAddrs.hasMoreElements();) {
                     InetAddress inetAddr = (InetAddress) inetAddrs.nextElement();
+                    if (inetAddr instanceof Inet6Address) {
+                        // not useful for our intended purpose...
+                        continue;
+                    }
                     if (!inetAddr.isLoopbackAddress()) {
 
                         if (inetAddr.isSiteLocalAddress()) {
