@@ -33,7 +33,7 @@ public class Mainstay {
     private static Object lock = new Object();
 
     // http://linux.die.net/man/1/stress
-    private static String[] command = {"stress", "--cpu", "1", "--timeout", "10"};
+    private static String[] command = {"stress", "--cpu", "1", "--timeout", "600"};
 
     public static void main(String[] args) {
         pb = new ProcessBuilder();
@@ -66,7 +66,7 @@ public class Mainstay {
                     process = pb.start();
                 } catch (IOException e) {
                     process = null;
-                    // e.printStackTrace();
+                    // we don't particularly care with this application.
                 }
             }
         }
