@@ -16,6 +16,7 @@ import static spark.Spark.*;
  * Created by Martin Paulo on 19/05/2014.
  */
 public class Mainstay {
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(Mainstay.class);
 
     private static final Map<String, Integer> totals = new ConcurrentSkipListMap<>();
     private static final Map<String, History> history = new ConcurrentSkipListMap<>();
@@ -47,7 +48,7 @@ public class Mainstay {
 
     private static ModelAndView alarmView(Request request, Response response) {
         String alarmName = request.params(":name");
-        System.out.println(":name " + alarmName);
+        LOG.info("Fetching alarm :name " + alarmName);
         return new ModelAndView(history.get(alarmName), "view.mustache");
     }
 
@@ -84,7 +85,7 @@ public class Mainstay {
         totals.put(source, totals.getOrDefault(source, 0) + 1);
         History priorAlarms = history.get(source);
         if (priorAlarms == null) {
-            System.out.println(":source " + source);
+            LOG.info("Creating alarm :source " + source);
             priorAlarms = new History(source);
             history.put(source, priorAlarms);
         }
