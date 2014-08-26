@@ -40,7 +40,7 @@ public class Mainstay {
         // and we can view the totals of the alarm call as well
         get(URL_TOTALS, (rq, rs) -> new Totals().getTotals(totals), new MustacheTemplateEngine());
         // of course we might want reset the totals and the history
-        get("/clear", Mainstay::clearAll);
+        //get("/clear", Mainstay::clearAll);
         // and remove the entire set of totals and history.
         get("/reset", Mainstay::resetTotals);
         get("/", (rq, rs) -> IpModel.getInstance().getView("index.mustache"), new MustacheTemplateEngine());
@@ -52,12 +52,12 @@ public class Mainstay {
         return new ModelAndView(history.get(alarmName), "view.mustache");
     }
 
-    private static Response clearAll(Request request, Response response) {
-        totals.clear();
-        history.clear();
-        response.redirect(URL_TOTALS);
-        return response;
-    }
+//    private static Response clearAll(Request request, Response response) {
+//        totals.clear();
+//        history.clear();
+//        response.redirect(URL_TOTALS);
+//        return response;
+//    }
 
     private static Response resetTotals(Request request, Response response) {
         totals.keySet().forEach((key) -> totals.put(key, 0));
