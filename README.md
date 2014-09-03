@@ -3,24 +3,24 @@ nectar-examples
 
 Example code for working with the NeCTAR Research Cloud
 
-SparkStressTester
-=================
+SparkStressed
+-------------
 
 A project that when run, can be used to stress the host machine.
 
-To run it simply use the heat template in the heat subdirectory
+See the README.md in the project directory for more information
 
-SparkCeilometerAlarmTester
-==========================
+SparkAlarmCounter
+-----------------
 
 A project that when run, can be used to count Ceilometer alarm calls
 
-To run it simply use the heat template in the heat subdirectory
+See the README.md in the project directory for more information
 
 SparkDiskTester
-=================
+---------------
 
 A project that when run, can be used to see how fast the host machine accesses it's storage.
 Be warned! A very naive implementation.
 
-To run it simply use the heat template in the heat subdirectory.
+See the README.md in the project directory for more information
