@@ -94,8 +94,8 @@ Resources:
         # set it as the default..
         apt-get install oracle-java8-set-default
 
-        git clone https://github.com/MartinPaulo/SparkProject.git
-        cd SparkProject
+        git clone https://github.com/NeCTAR-RC/nectar-examples.git
+        cd nectar-examples/SparkAlarmCounter
         ./start.sh
 
 Outputs:
