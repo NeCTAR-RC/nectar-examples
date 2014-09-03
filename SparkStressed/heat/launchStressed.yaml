@@ -93,8 +93,8 @@ Resources:
         #install stress
         apt-get -y install stress
 
-        git clone https://github.com/MartinPaulo/SparkStressTester.git
-        cd SparkStressTester
+        git clone https://github.com/NeCTAR-RC/nectar-examples.git
+        cd nectar-examples/SparkStressed
         ./start.sh
 
 Outputs:
