@@ -112,8 +112,8 @@ Resources:
         # set it as the default..
         apt-get install oracle-java8-set-default
 
-        git clone https://github.com/MartinPaulo/SparkDiskTester.git
-        cd SparkDiskTester
+        git clone https://github.com/NeCTAR-RC/nectar-examples.git
+        cd nectar-examples/SparkDiskTester
         ./start.sh
 
   VolumeAttachment:
