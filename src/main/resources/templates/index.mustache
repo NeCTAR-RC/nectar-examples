@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Test disk speed</title>
+    <link rel="stylesheet" type="text/css" href="mainstay.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="mainstay.js"></script>
+</head>
+<body>
+<div class="border">
+    <h2>Test disk speed</h2>
+
+    <p>This program simply wrote and read chunks of text data of different sizes to the instance drive, the transient storage
+        and the block storage. The times taken to read and write the files are recorded and shown.</p>
+    <p>
+        The results of this test are mostly meaningless. In this environment you have things such as networks, memory
+        caches etc. All of which conspire to distort any results... However, it does give you some idea as to how
+        your application may fare when accessing files on the different file storage mediums.</p>
+    <div class="code">
+        <code>
+            {{#results}}
+                {{line}}<br/>
+            {{/results}}
+        </code>
+    </div>
+    <p><b>Refresh until results for all three drives are shown...</b></p>
+</div>
+<p/>
+
+<!--div class="border">
+    <h2>Again, Again</h2>
+
+    <form action="write" method="post">
+        <fieldset id="form" {{disabled}}>
+            <input type="submit" value="Do it again!">
+        </fieldset>
+    </form>
+</div -->
+</body>
+</html>
