@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Stressed!</title>
+    <link rel="stylesheet" type="text/css" href="mainstay.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="mainstay.js"></script>
+</head>
+<body>
+<h1>Stressed!</h1>
+<div class="border">
+    <h2>Current server loads</h2>
+
+    <p>
+        Average CPU: <b id="averageLoad">{{averageLoad}}</b>
+    </p>
+
+    <p>
+        Current CPU: <b id="systemCpuLoad">{{systemCpuLoad}}</b>
+    </p>
+
+</div>
+<p/>
+
+<div class="border">
+    <h2>Stress this server!</h2>
+    <p>Invoke the <a href="http://linux.die.net/man/1/stress">stress utility</a> that is installed on this server.</p>
+    <form action="stress" method="post" autocomplete="on">
+        <fieldset id="form" {{disabled}}>
+            <label>
+                Number of CPU's:
+            </label>
+            <lable>1<input id="oneIsDefault" type="radio" name="cpu_count" value="1"{{#oneIsDefault}} checked {{/oneIsDefault}}/></lable>
+            <lable>2<input id="twoIsDefault" type="radio" name="cpu_count" value="2"{{#twoIsDefault}} checked {{/twoIsDefault}}/></lable>
+            <lable>4<input id="fourIsDefault"  type="radio" name="cpu_count" value="4"{{#fourIsDefault}} checked {{/fourIsDefault}}/></lable>
+            <lable>8<input id="eightIsDefault"  type="radio" name="cpu_count" value="8"{{#eightIsDefault}} checked {{/eightIsDefault}}/></lable>
+            <br/>
+            <label>
+                Duration in seconds:
+                <input type="number" id="timeout" name="timeout" value="{{timeout}}">
+            </label>
+            <br/>
+            <input type="submit" value="Stress this server!">
+        </fieldset>
+    </form>
+</div>
+</body>
+</html>

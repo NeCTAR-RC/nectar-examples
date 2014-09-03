@@ -1,0 +1,109 @@
+HeatTemplateFormatVersion: '2012-12-12'
+
+
+Description: 'Template to install the application on a NeCTAR instance'
+
+
+Parameters:
+
+  KeyName:
+    Description: Name of an existing KeyPair to enable SSH access to the instances
+    Type: String
+
+  InstanceType:
+    Description: The NeCTAR flavour the webserver is to run on
+    Type: String
+    Default: m1.small
+    AllowedValues: [m1.small, m1.medium, m1.large, m1.xlarge, m1.xxlarge]
+    ConstraintDescription: must be a valid NeCTAR flavour.
+
+  ImageName:
+    Type: String
+    Description: Name of the image to use for the instance to be created
+    Default: 'NeCTAR Ubuntu 14.04 (Trusty) amd64'
+    AllowedValues: ['NeCTAR Ubuntu 13.10 (Saucy) amd64', 'NeCTAR Ubuntu 14.04 (Trusty) amd64']
+
+
+Mappings:
+
+  InstanceId:
+   'NeCTAR Ubuntu 13.10 (Saucy) amd64': {ImageId: a6dcb912-8307-4d35-861f-3e41ce994666}
+   'NeCTAR Ubuntu 14.04 (Trusty) amd64': {ImageId: 563219b9-7d1d-44b4-a6b5-37f351799bc9}
+
+
+Resources:
+
+  # Needs a security group running on port 8080 to access it
+  # Remember creating a security group does eat into the number of groups that you are limited to (10)
+  AlertsSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: "Enable ping, HTTP access via port 8080 and SSH access"
+      SecurityGroupIngress:
+        -
+          IpProtocol: "icmp"
+          FromPort: "-1"
+          ToPort: "-1"
+          CidrIp: "0.0.0.0/0"
+        -
+          IpProtocol: "tcp"
+          FromPort: "8080"
+          ToPort: "8080"
+          CidrIp: "0.0.0.0/0"
+        -
+          IpProtocol: "tcp"
+          FromPort: "22"
+          ToPort: "22"
+          CidrIp: "0.0.0.0/0"
+  StressMachine:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId:
+        Fn::FindInMap:
+        - InstanceId
+        - {Ref: ImageName}
+        - ImageId
+      InstanceType: {Ref: InstanceType}
+      KeyName: {Ref: KeyName}
+      SecurityGroups: [{Ref: AlertsSecurityGroup}]
+      UserData: |
+        #!/bin/bash -v
+        apt-get update && sudo apt-get -y upgrade
+
+        apt-get -y install git
+
+        # time to sit back and smoke that cigar...
+        apt-get -y install maven
+
+        # then java 8
+        apt-get -y install python-software-properties
+
+        add-apt-repository ppa:webupd8team/java -y
+        apt-get -q -y update
+
+        # from http://askubuntu.com/questions/190582/installing-java-automatically-with-silent-option
+        echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections
+        echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections
+
+        apt-get install oracle-java8-installer -y
+
+        # set it as the default..
+        apt-get install oracle-java8-set-default
+
+        #install stress
+        apt-get -y install stress
+
+        git clone https://github.com/MartinPaulo/SparkStressTester.git
+        cd SparkStressTester
+        ./start.sh
+
+Outputs:
+
+  WebsiteURL:
+    Value:
+      Fn::Join:
+      - ''
+      - - http://
+        - Fn::GetAtt: [StressMachine, PublicIp]
+        - :8080/
+    Description: URL for stressed server
