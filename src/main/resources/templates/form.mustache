@@ -1,0 +1,52 @@
+{{> pageHeader}}
+<div class="border">
+    <h2>Mock ceilometer alarm</h2>
+
+    <p>
+        To register an alarm call via curl, simply do:
+    </p>
+    <code>
+        curl -X POST http://{{ipAddress}}:8080/alarm/some_alarm_name
+    </code>
+
+    <p>
+        Where <code>{{ipAddress}}</code> is the host running this application and <code>some_alarm_name</code> is the
+        name of the alarm to be registered. </p>
+
+    <p>(See <a
+            href="http://superuser.com/questions/361504/how-to-send-post-with-body-data-headers-and-http-params-over-the-curl-command#answer-361508">this
+        link</a> for ways to provide the post "body"). </p>
+
+    <p>Otherwise, simply fill in the name of the alarm below and submit the form.
+    </p>
+
+    <form class="alarm_form" action="alarm" method="post" autocomplete="on">
+        <ul>
+            <li><h2>Make call</h2></li>
+            <li><label for="alarm_name">Alarm name: </label>
+                <input type="text" name="alarm_name">
+            </li>
+            <li><label for="alarm_id">Alarm id: </label>
+                <input type="text" name="alarm_id" value="manual"/>
+            </li>
+
+            <li><label for="previous">Previous state:</label>
+                <input type="text" name="previous" value="unknown"/>
+            </li>
+
+            <li><label for="current">Current state:</label>
+                <input type="text" name="current" value="alarm"/>
+            </li>
+
+            <li><label for="reason">Reason:</label>
+                <input type="text" name="reason" value="operator intervention"/>
+            </li>
+
+            <li>
+                <input type="submit" value="Submit">
+            </li>
+        </ul>
+    </form>
+</div>
+<p>To see the totals: <a href="/totals">to date</a></p>
+{{> pageFooter}}
