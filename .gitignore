@@ -52,4 +52,9 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
-TroveLiquibaseDemo/src/main/resources/do_not_version/connection.properties
+# ignore the database secrets
+TroveLiquibaseDemo/src/main/resources/do_not_version/*.properties
+
+# and some of the intellij junk
+.idea/
+*.iml
