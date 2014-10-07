@@ -65,7 +65,31 @@ parameters:
     description: ID of the image to use for the instance to be created
     type: string
 
+
 resources:
+  # Needs a security group running on port 8080 to access it
+  # Remember creating a security group does eat into the number of groups that you are limited to (10)
+  security_group:
+    type: "AWS::EC2::SecurityGroup"
+    properties:
+      GroupDescription: "Enable ping, HTTP access via port 8080 and SSH access"
+      SecurityGroupIngress:
+        -
+          IpProtocol: "icmp"
+          FromPort: "-1"
+          ToPort: "-1"
+          CidrIp: "0.0.0.0/0"
+        -
+          IpProtocol: "tcp"
+          FromPort: "8080"
+          ToPort: "8080"
+          CidrIp: "0.0.0.0/0"
+        -
+          IpProtocol: "tcp"
+          FromPort: "22"
+          ToPort: "22"
+          CidrIp: "0.0.0.0/0"
+
   sample_database:
     type: OS::Trove::Instance
     # Currently trove lives in its own availability_zone, so do not use the availability_zone attribute.
@@ -83,11 +107,64 @@ resources:
       image:  { get_param: image_id }
       flavor:  { get_param: instance_flavour }
       availability_zone: { get_param: availability_zone }
+      security_groups: [ { get_resource: security_group } ]
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash -v
+            apt-get update && sudo apt-get -y upgrade
+
+            apt-get -y install git
+
+            # time to sit back and smoke that cigar...
+            apt-get -y install maven
+
+            # then java 8
+            apt-get -y install python-software-properties
+            add-apt-repository ppa:webupd8team/java -y
+            apt-get -q -y update
+
+            # from http://askubuntu.com/questions/190582/installing-java-automatically-with-silent-option
+            echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections
+            echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections
+
+            apt-get install oracle-java8-installer -y
+
+            # set it as the default..
+            apt-get install oracle-java8-set-default
+
+            git clone https://github.com/NeCTAR-RC/nectar-examples.git
+
+            # fix the "unable to resolve host" error messages...
+            cat << EOF >> /etc/hosts
+            127.0.0.1     `hostname`
+            EOF
+
+            # set up the property file with the correct passwords
+            cat << EOF > /nectar-examples/TroveLiquibaseDemo/src/main/resources/do_not_version/connection.properties
+            db.driver=com.mysql.jdbc.Driver
+            db.url=jdbc:mysql://data_store_hostname:3306/db_name
+            db.username=db_user
+            db.password=db_password
+            EOF
+
+            cd nectar-examples/TroveLiquibaseDemo
+            ./start.sh
+          params:
+            db_name: { get_param: db_name }
+            db_user: { get_param: db_user }
+            db_password: { get_param: db_password }
+            data_store_hostname: { get_attr: [sample_database, hostname] }
 
 outputs:
+
   host_name:
     description: The host name of the data store.
     value: { get_attr: [sample_database, hostname] }
   host_href:
     description: The href of the data store.
     value: { get_attr: [sample_database, href] }
+
+  web_app_url:
+    description: The url of the web appliction.
+    value: { get_attr: [liquibase_instance, accessIPv4 ] }
