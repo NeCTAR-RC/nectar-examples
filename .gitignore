@@ -52,3 +52,4 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
+TroveLiquibaseDemo/src/main/resources/do_not_version/connection.properties
