@@ -61,7 +61,7 @@
                 <configuration>
                     <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                     <changeLogFile>src/main/resources/liquibase/master_change_log.xml</changeLogFile>
-                    <propertyFile>liquibase.properties</propertyFile>
+                    <propertyFile>target/classes/connections/liquibase.properties</propertyFile>
                 </configuration>
                 <executions>
                     <execution>

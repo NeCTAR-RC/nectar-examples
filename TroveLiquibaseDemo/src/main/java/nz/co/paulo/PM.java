@@ -2,7 +2,10 @@ package nz.co.paulo;
 
 import spark.ModelAndView;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +18,8 @@ import java.util.Properties;
 public class PM {
 
     private static final String SQL_PRODUCTS = "SELECT CODE, DESCRIPTION, VALUE FROM PRODUCTS";
-    private static final String PROPERTIES_FILE = "liquibase.properties";
     private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(Mainstay.class);
+    public static final String LIQUIBASE_PROPERTIES = "target/classes/connections/liquibase.properties";
 
     private static PM instance = null;
 
@@ -78,7 +81,7 @@ public class PM {
     private String getDbUrl() {
         Properties properties = new Properties();
         String result = "";
-        try (InputStream is = getClass().getClassLoader().getResourceAsStream(PROPERTIES_FILE)) {
+        try (InputStream is = new FileInputStream(new File(LIQUIBASE_PROPERTIES))) {
             properties.load(is);
             result = properties.getProperty("url") +
                     "?user=" + properties.getProperty("username") +
