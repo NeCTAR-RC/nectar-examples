@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Trove & Liquibase</title>
+    <link rel="stylesheet" type="text/css" href="mainstay.css">
+</head>
+<body>
+<h1>Trove: "A store of valuable or delightful things"</h1>
+<div class="border">
+    <h2>In the Cellar</h2>
+
+    <div class="table">
+        <table>
+            <tr>
+                <th> Code </th>
+                <th> Value </th>
+                <th> Description </th>
+            </tr>
+            {{#rows}}
+                <tr class="{{cssClass}}">
+                    <td>{{code}}</td>
+                    <td>{{value}}</td>
+                    <td>{{description}}</td>
+                </tr>
+            {{/rows}}
+        </table>
+    </div>
+
+</div>
+<p/>
+</body>
+</html>
