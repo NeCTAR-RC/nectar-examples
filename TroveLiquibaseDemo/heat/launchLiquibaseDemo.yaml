@@ -11,35 +11,59 @@ description: >
 
 parameters:
   db_password:
+    description: Password for the database user (must be > 6 characters long).
     type: string
     label: Database User Password
-    description: Password for the database user (must be > 6 characters long).
     hidden: true
     constraints:
       - length: { min: 6}
         description: Passwords must be at least 6 characters in length.
 
   db_user:
+    description: The name of the database user.
     type: string
     label: Database User Name
-    description: The name of the database user.
 
   db_name:
+    description: The name of the database that you want to create in the Trove instance.
     type: string
     label: Database Name
-    description: The name of the database that you want to create in the Trove instance.
     constraints:
       - length: { min: 4}
         description: The database must be at least 4 characters in length.
 
   trove_instance_name:
+    description: The name of the Trove instance that you want to create.
     type: string
     label: Trove Instance Name
-    description: The name of the Trove instance that you want to create.
     constraints:
       - length: { min: 4}
         description: The instance name must be at least 4 characters in length.
 
+  my_key:
+    description: Name of an existing KeyPair to enable SSH access to the instances
+    type: string
+    label: KeyPair Name
+
+  instance_flavour:
+    description: The NeCTAR flavour the webserver is to run on.
+    type: string
+    default: m1.small
+    constraints:
+      - allowed_values: [m1.small, m1.medium, m1.large, m1.xlarge, m1.xxlarge]
+        description: This must be a valid NeCTAR flavour.
+
+  availability_zone:
+    description: The NeCTAR zone in which the VM is to run
+    type: string
+    default: melbourne-qh2
+    constraints:
+      - allowed_values: [melbourne-qh2, melbourne-np]
+        description: This must currently be one of Melbourne's zones
+
+  image_id:
+    description: ID of the image to use for the instance to be created
+    type: string
 
 resources:
   sample_database:
@@ -52,6 +76,13 @@ resources:
       size: 1
       users: [{ password: { get_param: db_password }, name: { get_param: db_user }, databases: [ { get_param: db_name} ] }, ]
 
+  liquibase_instance:
+    type: OS::Nova::Server
+    properties:
+      key_name:  { get_param: my_key }
+      image:  { get_param: image_id }
+      flavor:  { get_param: instance_flavour }
+      availability_zone: { get_param: availability_zone }
 
 outputs:
   host_name:
