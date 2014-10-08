@@ -162,9 +162,6 @@ outputs:
   host_name:
     description: The host name of the data store.
     value: { get_attr: [sample_database, hostname] }
-  host_href:
-    description: The href of the data store.
-    value: { get_attr: [sample_database, href] }
 
   web_app_url:
     description: The url of the web appliction.
