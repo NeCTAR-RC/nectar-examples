@@ -17,7 +17,7 @@ import java.util.Properties;
  */
 public class PM {
 
-    private static final String SQL_PRODUCTS = "SELECT CODE, DESCRIPTION, VALUE FROM PRODUCTS";
+    private static final String SQL_PRODUCTS = "SELECT CODE, NAME, DESCRIPTION FROM WINES";
     private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(Mainstay.class);
     public static final String LIQUIBASE_PROPERTIES = "target/classes/connections/liquibase.properties";
 
@@ -40,7 +40,7 @@ public class PM {
         final String cssClass = getCssClass();
 
         final String code;
-        final String value;
+        final String name;
         final String description;
 
         private static String getCssClass() {
@@ -48,9 +48,9 @@ public class PM {
             return ((rowCount % 2 != 0) ? "even" : "odd");
         }
 
-        Row(String code, String value, String description) {
+        Row(String code, String name, String description) {
             this.code = code;
-            this.value = value;
+            this.name = name;
             this.description = description;
         }
     }
@@ -66,8 +66,8 @@ public class PM {
                     while (rs.next()) {
                         String code = rs.getString("CODE");
                         String description = rs.getString("DESCRIPTION");
-                        String value = rs.getString("VALUE");
-                        rows.add(new Row(code, value, description));
+                        String name = rs.getString("NAME");
+                        rows.add(new Row(code, name, description));
                     }
                 }
             }
