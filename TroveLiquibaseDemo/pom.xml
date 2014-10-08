@@ -60,7 +60,7 @@
                 <version>3.2.2</version>
                 <configuration>
                     <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
-                    <changeLogFile>src/main/resources/liquibase/master_change_log.xml</changeLogFile>
+                    <changeLogFile>target/classes/liquibase/master_change_log.xml</changeLogFile>
                     <propertyFile>target/classes/connections/liquibase.properties</propertyFile>
                 </configuration>
                 <executions>

@@ -5,11 +5,11 @@
     <changeSet id="3" author="mpaulo">
         <addUniqueConstraint columnNames="CODE,DESCRIPTION"
                              constraintName="CODE_DESC_UNIQUE"
-                             tableName="PRODUCTS"/>
-        <addForeignKeyConstraint baseColumnNames="PRODUCT_CODE"
-                                 baseTableName="PRODUCT_CELLAR"
-                                 constraintName="PRODUCT_FK"
+                             tableName="WINES"/>
+        <addForeignKeyConstraint baseColumnNames="WINE_CODE"
+                                 baseTableName="WINE_CELLAR"
+                                 constraintName="WINE_FK"
                                  referencedColumnNames="CODE"
-                                 referencedTableName="CELLARS"/>
+                                 referencedTableName="WINES"/>
     </changeSet>
 </databaseChangeLog>
