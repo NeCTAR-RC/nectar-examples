@@ -30,7 +30,7 @@ public class Mainstay {
 
     private static ProcessBuilder pb;
     private static Process process;
-    private static Object lock = new Object();
+    private static final Object lock = new Object();
 
     // http://linux.die.net/man/1/stress
     private static String[] command = {"stress", "--cpu", "1", "--timeout", "600"};
