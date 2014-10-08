@@ -25,7 +25,7 @@ public class DiskTester {
 
     public static class Context {
 
-        ArrayList<DiskTester.Row> results = new ArrayList<>();
+        final ArrayList<DiskTester.Row> results = new ArrayList<>();
 
         @SuppressWarnings("CloneDoesntCallSuperClone")
         @Override
