@@ -15,11 +15,11 @@ import java.util.Properties;
  * An implementation of the Presentation Model pattern (http://martinfowler.com/eaaDev/PresentationModel.html).
  * Created by martin paulo on 3/10/2014.
  */
-public class PM {
+class PM {
 
     private static final String SQL_PRODUCTS = "SELECT CODE, NAME, DESCRIPTION FROM WINES";
     private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(Mainstay.class);
-    public static final String LIQUIBASE_PROPERTIES = "target/classes/connections/liquibase.properties";
+    private static final String LIQUIBASE_PROPERTIES = "target/classes/connections/liquibase.properties";
 
     private static PM instance = null;
 
