@@ -143,9 +143,10 @@ resources:
             # set up the property file with the correct passwords
             cat << EOF > /nectar-examples/TroveLiquibaseDemo/src/main/resources/do_not_version/connection.properties
             db.driver=com.mysql.jdbc.Driver
-            db.url=jdbc:mysql://data_store_hostname:3306/db_name
+            db.url=jdbc:mysql://data_store_hostname:3306
             db.username=db_user
             db.password=db_password
+            db.name=db_name
             EOF
 
             cd nectar-examples/TroveLiquibaseDemo
@@ -167,4 +168,8 @@ outputs:
 
   web_app_url:
     description: The url of the web appliction.
-    value: { get_attr: [liquibase_instance, accessIPv4 ] }
+    value:
+      str_replace:
+        template: http://host:8080
+        params:
+          host: { get_attr: [liquibase_instance, accessIPv4 ] }
