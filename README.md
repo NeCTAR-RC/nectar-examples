@@ -3,21 +3,21 @@ nectar-examples
 
 Example code for working with the NeCTAR Research Cloud.
 
-SparkStressed
+[SparkStressed](SparkStressed/)
 -------------
 
 A project that when run, can be used to stress the host machine.
 
 See the [README.md](SparkStressed/README.md) in the project directory for more information.
 
-SparkAlarmCounter
+[SparkAlarmCounter](SparkAlarmCounter/)
 -----------------
 
 A project that when run, can be used to count Ceilometer alarm calls.
 
 See the [README.md](SparkAlarmCounter/README.md) in the project directory for more information.
 
-SparkDiskTester
+[SparkDiskTester](SparkDiskTester/)
 ---------------
 
 A project that when run, can be used to see how fast the host machine 
