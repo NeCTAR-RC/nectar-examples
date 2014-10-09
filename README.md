@@ -27,7 +27,7 @@ Be warned! A very naive implementation.
 
 See the [README.md](SparkDiskTester/README.md) in the project directory for more information.
 
-TroveLiquibaseDemo
+[TroveLiquibaseDemo](TroveLiquibaseDemo/)
 ------------------
 
 A demonstrator that uses Liquibase in conjunction with Maven to create 
