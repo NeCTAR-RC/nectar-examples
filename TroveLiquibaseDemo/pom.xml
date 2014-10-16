@@ -18,11 +18,12 @@
             <artifactId>spark-core</artifactId>
             <version>2.0.0</version>
         </dependency>
-        <!-- logging to the screen... -->
+        <!-- logging to a file -->
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
+            <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.7</version>
+            <scope>runtime</scope>
         </dependency>
         <!-- the template engine used -->
         <dependency>
@@ -45,6 +46,15 @@
     </dependencies>
     <build>
         <plugins>
+            <plugin>
+                <!-- https://github.com/andrewgaul/modernizer-maven-plugin -->
+                <groupId>org.gaul</groupId>
+                <artifactId>modernizer-maven-plugin</artifactId>
+                <version>1.1.0</version>
+                <configuration>
+                    <javaVersion>1.8</javaVersion>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
