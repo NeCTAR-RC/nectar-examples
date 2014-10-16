@@ -102,6 +102,7 @@ resources:
 
   liquibase_instance:
     type: OS::Nova::Server
+    depends_on: sample_database
     properties:
       key_name:  { get_param: my_key }
       image:  { get_param: image_id }
