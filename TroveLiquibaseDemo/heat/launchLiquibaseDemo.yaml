@@ -53,6 +53,14 @@ parameters:
       - allowed_values: [m1.small, m1.medium, m1.large, m1.xlarge, m1.xxlarge]
         description: This must be a valid NeCTAR flavour.
 
+  availability_zone:
+    description: The NeCTAR zone in which the VM is to run
+    type: string
+    default: melbourne-qh2
+    constraints:
+      - allowed_values: [melbourne-qh2, melbourne-np]
+        description: This must currently be one of Melbourne's zones
+
   image_id:
     description: ID of the image to use for the instance to be created
     type: string
@@ -99,7 +107,7 @@ resources:
       key_name:  { get_param: my_key }
       image:  { get_param: image_id }
       flavor:  { get_param: instance_flavour }
-      availability_zone: melbourne-qh2
+      availability_zone: { get_param: availability_zone }
       security_groups: [ { get_resource: security_group } ]
       user_data:
         str_replace:
